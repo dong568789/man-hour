@@ -1,0 +1,31 @@
+<IfModule mod_rewrite.c>
+	<IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+	</IfModule>
+
+	RewriteEngine On
+	RewriteBase /
+
+	# Handle Authorization Header
+	RewriteCond %{HTTP:Authorization} .
+	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+	# redirect static to static/common
+	RewriteCond %{REQUEST_URI} .*/static/.*
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^static/(?!common/)(.*)$ static/common/$1 [L]
+
+	RewriteRule ^plugins/(.*)$ static/plugins/$1 [L]
+
+	# Redirect Trailing Slashes If Not A Folder...
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_URI} (.+)/$
+	RewriteRule ^ %1 [L,R=301]
+
+	# Handle Front Controller...
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^ index.php [L]
+	#RewriteRule .* index.php/$0 [PT,L]
+	#RewriteRule .* index.php [L,E=PATH_INFO:$1]
+</IfModule>
