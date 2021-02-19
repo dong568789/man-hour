@@ -27,7 +27,6 @@ class Kernel extends ConsoleKernel
     {
         $today = Carbon::today();
         $yesterday = Carbon::yesterday();
-        $last2 = Carbon::today()->subDays(2);
 
         $logPath = storage_path('logs/tasks.log');
 
@@ -47,7 +46,7 @@ class Kernel extends ConsoleKernel
         /**
          * 每天统计项目成本
          */
-        $schedule->command('project:stat')
+        $schedule->command('project:stat --date='.$yesterday->format('Y-m-d'))
             ->dailyAt('00:10')
             ->appendOutputTo($logPath);
     }
