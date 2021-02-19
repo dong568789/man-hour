@@ -3,11 +3,9 @@
 	<div class="form-group col-sm-3">
 		<label class="col-md-3 control-label" for="name">项目名称</label>
 		<div class="col-md-9">
-			<div class="input-group">
 				<select type="text" id="pid" name="f[pid]" class="form-control select-model"
 						data-model="admin/project"
 						data-text="{{name}}" data-placeholder="请输入关键词..." value="<{$_filters.pid.eq}>"></select>
-			</div>
 		</div>
 	</div>
 	<div class="form-group col-sm-3">
