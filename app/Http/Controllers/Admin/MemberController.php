@@ -36,14 +36,12 @@ class MemberController extends Controller
 		$this->_queries = $this->userRepo->_getQueries($request);
 
 
-//        if($this->_queries['ofRole'] ==  \App\Role::searchRole('administrator.pm', 'id')){
-//            $tpl = "pm";
-//        }elseif($this->_queries['ofRole'] ==  \App\Role::searchRole('administrator.project-member', 'id')){
-//            $tpl = "member";
-//        }else{
-//            $tpl = "list";
-//        }
-		return $this->view('admin.member.list');
+        if($this->_queries['ofRole'] ==  \App\Role::searchRole('administrator.project-member', 'id')){
+            $tpl = "member";
+        }else{
+            $tpl = "list";
+        }
+		return $this->view('admin.member.' . $tpl);
 	}
 
 	public function data(Request $request)

@@ -23,8 +23,7 @@
 				<div id="login-alt-container">
 					<!-- Title -->
 					<h1 class="push-top-bottom">
-						<i class="gi gi-flash"></i> <strong>L+</strong><br>
-						<small>L+，你永远都不会懂我！</small>
+						<small>管理系统</small>
 					</h1>
 					<!-- END Title -->
 
