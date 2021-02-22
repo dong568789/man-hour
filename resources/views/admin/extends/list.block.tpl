@@ -18,7 +18,7 @@
 </script>
 <script src="<{'js/datatable/jquery.dataTables.min.js'|static}>"></script>
 <script src="<{'js/template.js'|static}>"></script>
-<script src="<{'js/proui/table.min.js'|static}>"></script>
+<script src="<{'js/proui/table.js'|static}>"></script>
 <script src="<{'js/proui/export.min.js'|static}>"></script>
 <{include file="common/dates.inc.tpl"}>
 <{/block}>

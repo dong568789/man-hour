@@ -47,7 +47,6 @@ class ProjectMemberStatController extends Controller {
         return $this->api($data);
     }
 
-
     public function export(Request $request)
     {
         $data = $this->repo->export($request);

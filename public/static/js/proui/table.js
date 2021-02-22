@@ -347,16 +347,16 @@ $().ready(function(){
 				//call
 				$dt.triggerHandler('datatable.draw', [settings]);
 			},
-			/*footerCallback: function(tfoot, data, start, end, display) {
+			footerCallback: function(tfoot, data, start, end, display) {
 				$dt.triggerHandler('datatable.footer', [tfoot, data, start, end, display]);
 			},
-			formatNumber: function( toFormat ) {
-				$dt.triggerHandler('datatable.format-number', [toFormat]);
-			},
+            /*formatNumber: function( toFormat ) {
+                $dt.triggerHandler('datatable.format-number', [toFormat]);
+            },*/
 			headerCallback: function(thead, data, start, end, display) {
 				$dt.triggerHandler('datatable.header', [thead, data, start, end, display]);
 			},
-			infoCallback: function(settings, start, end, max, total, pre) {
+			/*infoCallback: function(settings, start, end, max, total, pre) {
 				$dt.triggerHandler('datatable.info', [settings, start, end, max, total, pre]);
 			},*/
 			initComplete: function(settings, json) {

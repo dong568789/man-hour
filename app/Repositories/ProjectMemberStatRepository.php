@@ -3,13 +3,17 @@
 namespace App\Repositories;
 
 use DB;
+use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\ProjectMemberStat;
 
 class ProjectMemberStatRepository extends Repository {
+
+    use ApiTrait;
 
 	public function prePage()
 	{
@@ -54,8 +58,17 @@ class ProjectMemberStatRepository extends Repository {
 		$model = new ProjectMemberStat;
 		$builder = $model->newQuery()->with(['member', 'project']);
 
+        $newBuilder = clone $builder;
+        $sum = $this->_getOther($request, $newBuilder->select([DB::raw('sum(hour) as sum_hour'), DB::raw('sum(cost) as sum_cost')]));
+
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);
+
+        if (!empty($data['data'][0])) {
+            $data['data'][0]['sum_hour'] = $sum->sum_hour;
+            $data['data'][0]['sum_cost'] = $sum->sum_cost;
+        }
+
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数
 		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 
@@ -91,4 +104,27 @@ class ProjectMemberStatRepository extends Repository {
         }
     }
 
+    public function _getOther(Request $request, Builder $builder)
+    {
+        $tables_columns = $this->_getColumns($builder);
+        $this->_doFilters($request, $builder, $tables_columns);
+        $this->_doQueries($request, $builder);
+
+        $query = $builder->getQuery();
+
+        if (!empty($query->groups)) //group by
+        {
+
+            return $query->getCountForPagination($query->groups);
+            // or
+            $query->columns = $query->groups;
+            return DB::table( DB::raw("({$builder->toSql()}) as sub") )
+                ->mergeBindings($builder->getQuery()) // you need to get underlying Query Builder
+                ->first();
+        } else
+            //DB::connection()->enableQueryLog(); // 开启查询日志
+            return $builder->first();;
+        //$queries = DB::getQueryLog(); // 获取查询日志
+        //print_r($builder->toSql());exit;
+    }
 }

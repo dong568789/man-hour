@@ -11,8 +11,8 @@
 <{block "table-th-plus"}>
 <th>项目名称</th>
 <th>负责人</th>
-<th>总成本</th>
-<th>每日</th>
+<th>总成本<br><span id="sum_cost" class="text-danger" style="font-size: 12px"></span></th>
+<th>每日<br><span id="sum_day_cost" class="text-danger" style="font-size: 12px"></span></th>
 <th>状态</th>
 <{/block}>
 
@@ -33,6 +33,18 @@
                 class="fa fa-list"></i> 明细</a>
 <{/block}>
 
+<{block "body-scripts"}>
+    <script>
+        (function($){
+            $('#datatable').on('datatable.header', function (event, head, data) {
+                if(data[0]){
+                    $('#sum_cost', head).html("总额：" + data[0].sum_cost);
+                    $('#sum_day_cost', head).html("总额：" + data[0].sum_day_cost);
+                }
+            });
+        })(jQuery);
+    </script>
+<{/block}>
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
 <{block "table-th-timestamps-updated_at"}><{/block}>

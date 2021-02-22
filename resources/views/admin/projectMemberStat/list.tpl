@@ -12,8 +12,8 @@
 <th>项目名称</th>
 <th>成员</th>
 <th>每日成本</th>
-<th>总工时(天)</th>
-<th>总成本</th>
+<th>总工时(天)<br><span id="sum_hour" class="text-danger" style="font-size: 12px"></span></th>
+<th>总成本<br><span id="sum_cost" class="text-danger" style="font-size: 12px"></span></th>
 <{/block}>
 
 <!-- DataTable的Block -->
@@ -25,6 +25,18 @@
 <td data-from="cost">{{data}}</td>
 <{/block}>
 
+<{block "body-scripts"}>
+    <script>
+        (function($){
+            $('#datatable').on('datatable.header', function (event, head, data) {
+                if(data[0]){
+                    $('#sum_cost', head).html("总额：" + data[0].sum_cost);
+                    $('#sum_hour', head).html("总额：" + data[0].sum_hour);
+                }
+            });
+        })(jQuery);
+    </script>
+<{/block}>
 <{block "table-th-options"}><{/block}>
 <{block "table-td-options"}><{/block}>
 <{block "table-tools-create"}><{/block}>
