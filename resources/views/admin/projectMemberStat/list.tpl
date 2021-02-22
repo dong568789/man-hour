@@ -19,7 +19,7 @@
 <!-- DataTable的Block -->
 <{block "table-td-plus"}>
 <td data-from="project" data-orderable="false">{{if data}}{{data.name}}{{/if}}</td>
-<td data-from="member" data-orderable="false">{{if data}}{{data.realname}}{{/if}}</td>
+<td data-from="member" data-orderable="false">{{if data}}<span class="label label-danger">{{data.realname}}</span>{{/if}}</td>
 <td data-from="member" data-orderable="false">{{data.cost}}</td>
 <td data-from="hour">{{data}}</td>
 <td data-from="cost">{{data}}</td>

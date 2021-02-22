@@ -52,7 +52,7 @@ class ProjectMemberLogRepository extends Repository {
 	public function data(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$model = new ProjectMemberLog;
-		$builder = $model->newQuery()->with([]);
+		$builder = $model->newQuery()->with(['project', 'member']);
 
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);

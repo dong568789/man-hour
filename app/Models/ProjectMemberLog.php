@@ -7,4 +7,14 @@ use App\Model;
 class ProjectMemberLog extends Model
 {
     protected $guarded = ['id'];
+
+    public function member()
+    {
+        return $this->belongsTo("App\\User", 'uid', 'id');
+    }
+
+    public function project()
+    {
+        return $this->belongsTo("App\\Models\\Project", 'pid', 'id');
+    }
 }

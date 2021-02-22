@@ -8,17 +8,15 @@
 					data-text="{{name}}" data-placeholder="请输入关键词..." value="<{$_filters.pid.eq}>"></select>
 		</div>
 	</div>
-	<{if $_permissionTable->checkUserRole(['super'])}>
 	<div class="form-group col-sm-3">
-		<label class="col-md-3 control-label" for="pm_uid">PM</label>
+		<label class="col-md-3 control-label" for="uid">项目成员</label>
 		<div class="col-md-9">
-			<select type="text" id="pm_uid" name="f[pm_uid]" class="form-control select-model"
+			<select type="text" id="uid" name="f[uid]" class="form-control select-model"
 					data-model="admin/member"
-					data-params='{"q":{"ofRole": <{\App\Role::searchRole("administrator.pm", "id")}>}}'
-					data-text="{{username}}({{post.title}})" data-placeholder="请输入关键词..." value="<{$_filters.pm_uid.eq}>"></select>
+					data-params='{"q":{"ofRole": <{\App\Role::searchRole("administrator.project-member", "id")}>}}'
+					data-text="{{username}}({{post.title}})" data-placeholder="请输入关键词..." value="<{$_filters.uid.eq}>"></select>
 		</div>
 	</div>
-	<{/if}>
 	<div class="form-group col-sm-3">
 		<label class="col-md-3 control-label" for="created_at-min">创建时间</label>
 		<div class="col-md-9">

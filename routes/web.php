@@ -29,6 +29,7 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
 		'project-apply' => 'ProjectApplyController',
 		'project-stat' => 'ProjectStatController',
 		'project-member-stat' => 'ProjectMemberStatController',
+		'project-member-log' => 'ProjectMemberLogController',
 	]);
 	$router->get('/', 'HomeController@index')->name('admin-index');
 
