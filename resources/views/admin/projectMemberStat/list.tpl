@@ -31,7 +31,7 @@
             $('#datatable').on('datatable.header', function (event, head, data) {
                 if(data[0]){
                     $('#sum_cost', head).html("总额：" + data[0].sum_cost);
-                    $('#sum_hour', head).html("总额：" + data[0].sum_hour);
+                    $('#sum_hour', head).html("总计：" + data[0].sum_hour);
                 }
             });
         })(jQuery);
