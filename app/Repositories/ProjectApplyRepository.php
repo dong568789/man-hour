@@ -53,15 +53,11 @@ class ProjectApplyRepository extends Repository {
 
     public function audit(Model $model)
     {
-        $pmRepo = new ProjectMemberRepository();
-        $projectMember = $pmRepo->normalProjectByUid($model->uid);
-        if (empty($projectMember) || $projectMember->pid != $model->to_pid) {
-            return false;
+        if (empty($model->dates)){
+            return;
         }
-
-        $pRepo = new ProjectRepository();
-        $project = $pRepo->find($model->pid);
-        $pRepo->forceUpdateMember($project, ['member_ids' => [$model->uid]]);
+        $pmRepo = new ProjectMemberRepository();
+        $pmRepo->updateMember($model->uid, $model->pid, $model->dates, $model->member->cost);
         return true;
     }
 
@@ -97,41 +93,55 @@ class ProjectApplyRepository extends Repository {
 	}
 
     /**
-     * 申请成员
+     * 工时申报
      * @param array $data
      * @return bool
      */
     public function apply(array $data) {
-        $pmRepo = new ProjectMemberRepository();
         $pRepo = new ProjectRepository();
+        $pmRepo = new ProjectMemberRepository();
 
         $user = Auth::user();
         $applyStatus = catalog_search('status.apply_status.applying', 'id');
-        $normal = catalog_search('status.member_status.normal', 'id');
-        foreach ($data['member_ids'] as $uid) {
-            $projectMember = $pmRepo->normalProjectByUid($uid);
 
-            $project = $pRepo->find($data['pid']);
-            //用户无项目状态，直接转入
-            if (empty($projectMember)){
-                $pRepo->forceUpdateMember($project, ['member_ids' => [$uid]]);
-                return true;
-            }
+        $pm = $pmRepo->checkHour($user->id, $data['dates']);
 
-            if ($data['pid'] == $projectMember->pid && $projectMember->member_status->id == $normal) continue;
-
-            $message = $user->realname . ",申请" .
-                $projectMember->member->realname . "[" . $projectMember->project->name  . "],加入" . $project->name;
-            $this->store([
-                'apply_uid' => $user->id,
-                'pid' => $data['pid'],
-                'uid' => $uid,
-                'to_pid' =>$projectMember->pid,
-                'apply_status' => $applyStatus,
-                'message' => $message
-            ]);
+        if (!empty($pm)) {
+            return ['status' => false, "msg" => "重复提交的时间【" . $pm->date . "】"];
         }
 
-        return true;
+        $project = $pRepo->find($data['pid']);
+        $message = $user->realname . ",申请在[" . $project->name  . "]项目中进行工时申报。";
+
+        $this->store([
+            'uid' => $user->id,
+            'pid' => $data['pid'],
+            'apply_status' => $applyStatus,
+            'message' => $message,
+            'dates' => $data['dates']
+        ]);
+
+        return ['status' => true];
+    }
+
+    public function style(&$pas)
+    {
+        $applying = catalog_search('status.apply_status.applying', 'id');
+        $pass = catalog_search('status.apply_status.pass', 'id');
+        $reject = catalog_search('status.apply_status.reject', 'id');
+        foreach ($pas as &$pa) {
+            $this->setStyle($pa, $applying, $pass, $reject);
+        }
+    }
+
+    public function setStyle(&$pa, ...$status)
+    {
+        if ($pa['apply_status']['id'] == $status[0]) {
+            $pa['style'] = "label label-warning";
+        } elseif ($pa['apply_status']['id'] == $status[1]) {
+            $pa['style'] = "label label-danger";
+        } elseif ($pa['apply_status']['id'] == $status[2]) {
+            $pa['style'] = "label label-default";
+        }
     }
 }

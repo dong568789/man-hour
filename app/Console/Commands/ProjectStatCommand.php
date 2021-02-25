@@ -45,6 +45,6 @@ class ProjectStatCommand extends Command
 
         $psRepo = new ProjectStatRepository();
 
-        $psRepo->stat($at);
+        $psRepo->stat();
     }
 }

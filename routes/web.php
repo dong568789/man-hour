@@ -29,7 +29,6 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
 		'project-apply' => 'ProjectApplyController',
 		'project-stat' => 'ProjectStatController',
 		'project-member-stat' => 'ProjectMemberStatController',
-		'project-member-log' => 'ProjectMemberLogController',
 	]);
 	$router->get('/', 'HomeController@index')->name('admin-index');
 
@@ -47,4 +46,8 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin'], function($router) 
 	$router->actions([
 		'auth' => ['index', 'login', 'logout', 'choose', 'authenticate-query'],
 	]);
+
+    $router->actions([
+        'register' => ['index', 'store'],
+    ]);
 });

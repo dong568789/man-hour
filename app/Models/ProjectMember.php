@@ -9,7 +9,7 @@ class ProjectMember extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'member_status' => 'catalog'
+
     ];
 
     public function member()

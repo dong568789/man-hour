@@ -36,7 +36,7 @@
 <{block "table-td-plus"}>
     <td data-from="username">{{data}}</td>
     <td data-from="realname">{{data}}</td>
-    <td data-from="post">{{if data}}<span class="label label-danger">{{data.title}}</span>{{/if}}</td>
+    <td data-from="post">{{if data}}<span class="label label-primary">{{data.title}}</span>{{/if}}</td>
     <{if $_permissionTable->checkUserPermission('finance.update')}>
     <td data-from="cost">{{data}}</td>
     <{/if}>

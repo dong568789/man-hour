@@ -59,8 +59,6 @@ class ProjectStatRepository extends Repository {
 		$model = new ProjectStat;
 		$builder = $model->newQuery()->with(['project' => function($query){
 		    $query->with(['pm']);
-        }, 'members' => function($query){
-            $query->with(['member']);
         }]);
 
         $newBuilder = clone $builder;
@@ -95,41 +93,31 @@ class ProjectStatRepository extends Repository {
 		return $data;
 	}
 
-	public function stat(Carbon $date = null)
+	public function stat()
     {
-        DB::transaction(function() use ($date) {
+        DB::transaction(function() {
             $pRepo = new ProjectRepository();
-            $pmlRepo = new ProjectMemberLogRepository();
+            $pmRepo = new ProjectMemberRepository();
             $pmsRepo = new ProjectMemberStatRepository();
 
             $projects = $pRepo->projects();
-            $normal = catalog_search('status.member_status.normal', 'id');
 
             foreach ($projects as $project) {
-                $pid = $project->id;
-                $members = $project->members()->where('member_status', $normal)->get();
-                if ($members->isEmpty()){
-                    $this->createOrUpdate($pid, 0);
-                    continue;
-                }
-                $sumCost = $count = 0;
-                foreach ($members as $member) {
-                    $sumCost += $member->cost;
-                    $count++;
-
+                $pmList = $pmRepo->countMemberHourByPid($project->id);
+                $sumCost = $dayCost = 0;
+                foreach ($pmList as $item) {
                     //更新成员统计
-                    $pmsRepo->createOrUpdate($pid, $member->id, $member->cost);
-
-                    //添加每日记录
-                    $pmlRepo->store(['date' => $date, 'pid' => $pid, 'uid' => $member->id, 'day_cost' =>
-                        $member->cost]);
+                    $memberCost = $item->hour * $item->member->cost;
+                    $pmsRepo->createOrUpdate($project->id, $item->uid, $memberCost, $item->hour);
+                    $sumCost += $memberCost;
+                    $dayCost += $item->member->cost;
                 }
+
+                $avg = $sumCost > 0 ? $sumCost / $pmList->count() : 0;
                 //更新项目统计
-                $this->createOrUpdate($pid, $sumCost);
+                $this->createOrUpdate($project->id, $sumCost, $avg, $dayCost);
             }
         });
-
-
     }
 
     /**
@@ -139,14 +127,11 @@ class ProjectStatRepository extends Repository {
      * @param Carbon $date
      * @return mixed
      */
-    public function createOrUpdate(int $pid, int $cost)
+    public function createOrUpdate(int $pid, float $cost, float $avg, float $dayCost)
     {
-        $ps = ProjectStat::where('pid', $pid)->first();
-        if (empty($ps)){
-            $this->store(['pid' => $pid, 'cost' => $cost, 'day_cost' => $cost]);
-        } else {
-            $ps->increment('cost', $cost, ['day_cost' => $cost]);
-        }
+        return DB::transaction(function() use ($pid, $cost, $avg, $dayCost) {
+            return ProjectStat::updateOrCreate(['pid' => $pid], ['cost' => $cost, 'avg_cost' => $avg, 'day_cost' => $dayCost]);
+        });
     }
 
     public function _getOther(Request $request, Builder $builder)

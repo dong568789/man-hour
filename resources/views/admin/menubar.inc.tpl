@@ -47,10 +47,11 @@
 <div class="collapse navbar-collapse" id="horizontal-menu-collapse">
 	<ul class="nav navbar-nav">
 
+		<{if !$_permissionTable->checkUserRole(['project-member'])}>
 		<li>
 			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">用户 <i class="fa fa-angle-down"></i></a>
 			<ul class="dropdown-menu">
-				<{if $_permissionTable->checkUserRole(['super', 'finance'])}>
+				<{if $_permissionTable->checkUserRole(['super'])}>
 				<li><a href="<{'admin/member'|url}>?q[ofRole]=17"><i class="fa fa-user fa-fw pull-right"></i>
 						PM列表</a></li>
 				<{/if}>
@@ -58,12 +59,13 @@
 				<li><a href="<{'admin/member'|url}>?q[ofRole]=18"><i class="fa fa-user fa-fw pull-right"></i>
 						成员列表</a></li>
 				<{/if}>
-				<{if $_permissionTable->checkUserRole(['super', 'finance'])}>
+				<{if $_permissionTable->checkUserRole(['super'])}>
 				<li><a href="<{'admin/member'|url}>?q[ofRole]=19"><i class="fa fa-user fa-fw pull-right"></i>
 						财务列表</a></li>
 				<{/if}>
 			</ul>
 		</li>
+		<{/if}>
 		<{if $_permissionTable->checkUserRole(['super', 'finance', 'pm'])}>
 		<li>
 			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">项目管理 <i class="fa fa-angle-down"></i></a>
@@ -84,11 +86,13 @@
 						项目统计</a></li>
 				<li><a href="<{'admin/project-member-stat'|url}>"><i class="fa fa-bar-chart fa-fw pull-right"></i>
 						成员统计</a></li>
-				<li><a href="<{'admin/project-member-log'|url}>"><i class="fa fa-file fa-fw pull-right"></i>
-						每日明细</a></li>
 			</ul>
 		</li>
 		<{/if}>
+		<li><a href="<{'admin/project-apply'|url}>">
+				申请记录</a></li>
+		<li><a href="<{'admin/project-member'|url}>">
+				工时明细</a></li>
 		<{pluginclude file="admin/menubar.inc.tpl"}>
 	</ul>
 </div>

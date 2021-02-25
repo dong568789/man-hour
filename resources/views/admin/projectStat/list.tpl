@@ -24,7 +24,7 @@
 <td data-from="day_cost">{{data}}</td>
 <td data-from="project" data-orderable="false">
     {{if data}}
-    <span class="label label-danger"> {{data.project_status.title}}</span>
+    <span class="{{data.style}}"> {{data.project_status.title}}</span>
     {{/if}}
 </td>
     <{/block}>

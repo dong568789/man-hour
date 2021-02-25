@@ -90,6 +90,12 @@
 									<button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-angle-right"></i> <span id="submit-text">登录</span></button>
 								</div>
 							</div>
+							<div class="form-group">
+								<div class="col-xs-12 text-center">
+									<small>没有帐号?</small>
+									<a href="<{url('admin/register')}>" id="link-register"><small>点此注册</small></a>
+								</div>
+							</div>
 						</form>
 						<!-- END Login Form -->
 					</div>

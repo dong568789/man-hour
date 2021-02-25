@@ -19,16 +19,6 @@
 		</div>
 		<{/if}>
 		<div class="form-group">
-			<label class="col-md-3 control-label" for="member_ids">项目成员</label>
-			<div class="col-md-9">
-				<select type="text" id="member_ids" name="member_ids[]" class="form-control select-model"
-						data-model="admin/member"
-						data-params='{"q":{"ofRole": <{\App\Role::searchRole("administrator.project-member", "id")}>}}'
-						data-text="{{username}}({{post.title}})" data-placeholder="请输入关键词..." value="<{if !empty($_data)
-				}><{$_data->members->modelKeys()|implode:','}><{/if}>" multiple="multiple"></select>
-			</div>
-		</div>
-		<div class="form-group">
 			<label class="col-md-3 control-label">项目状态</label>
 			<div class="col-md-9">
 				<{foreach catalog_search('status.project_status', 'children') as $v}>

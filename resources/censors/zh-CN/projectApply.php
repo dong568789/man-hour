@@ -6,10 +6,14 @@ return [
             'name' => '状态',
             'rules' => 'numeric'
         ],
+        'mark' => [
+            'name' => '拒绝理由',
+            'rules' => 'nullable'
+        ],
     ],
     'apply' => [
-        'member_ids' => [
-            'name' => '成员',
+        'dates' => [
+            'name' => '申报时间',
             'rules' => 'required|array'
         ],
         'pid' => [

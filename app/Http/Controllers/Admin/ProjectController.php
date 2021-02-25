@@ -20,7 +20,7 @@ class ProjectController extends Controller {
 
     protected $repo;
 
-    protected $keys = ['detail', 'name', 'cover_id', 'project_status', 'end_at', 'pm_uid', 'member_ids'];
+    protected $keys = ['detail', 'name', 'cover_id', 'project_status', 'end_at', 'pm_uid'];
 
     public function __construct(ProjectRepository $repo)
     {
@@ -63,9 +63,8 @@ class ProjectController extends Controller {
         $project = $this->repo->find($id);
         if (empty($project))
             return $this->failure_notexists();
-        $projects = [$project];
-        $this->repo->style($projects);
-        $this->_data = $projects[0];
+
+        $this->_data = $project;
 
         return !$request->offsetExists('of') ? $this->view('admin.project.show') : $this->api($project->toArray());
     }
@@ -81,13 +80,9 @@ class ProjectController extends Controller {
     {
         $data = $this->censor($request, 'project.store', $this->keys);
 
-        $extraFiled = ['member_ids'];
-        $extra = array_only($data, $extraFiled);
-        $data = array_except($data, $extraFiled);
         $user = Auth::user();
         $this->isPm($user) && $data['pm_uid'] = $user->id;
         $project = $this->repo->store($data);
-        !empty($extra['member_ids']) && (new ProjectMemberRepository)->updateMember($project->id, $extra['member_ids']);
 
         return $this->success('', url('admin/project'));
     }
@@ -110,21 +105,9 @@ class ProjectController extends Controller {
             return $this->failure_notexists();
 
         $data = $this->censor($request, 'project.store', $this->keys, $project);
-        $extraFiled = ['member_ids'];
-        $extra = array_only($data, $extraFiled);
-        $data = array_except($data, $extraFiled);
 
         $this->repo->update($project, $data);
-        $pmRepo = new ProjectMemberRepository();
 
-        $extra['member_ids'] = $extra['member_ids'] ?? [];
-
-        //项目完结，更新成员状态
-        if ($data['project_status'] == catalog_search('status.project_status.ending', 'id')) {
-            $pmRepo->updateMember($project->id, []);
-        }else{
-            $pmRepo->updateMember($project->id, $extra['member_ids']);
-        }
         return $this->success();
     }
 
@@ -142,11 +125,18 @@ class ProjectController extends Controller {
         return $this->roleName($user) == 'pm';
     }
 
+    private function isMember(User $user)
+    {
+        return $this->roleName($user) == 'project-member';
+    }
+
     private function parseRequest(Request $request)
     {
         $f = $request->input('f', []);
         $user = Auth::user();
-        $this->isPm($user) && $f['pm_uid'] = $user->id;
+        if($this->isPm($user)){
+            $f['pm_uid'] = $user->id;
+        }
 
         $request->offsetSet('f', $f);
     }

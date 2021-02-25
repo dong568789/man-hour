@@ -29,11 +29,10 @@ class CreateProjectsTable extends Migration
         Schema::create('project_members', function (Blueprint $table) {
             $table->integer('id', true);
             $table->unsignedInteger('uid')->comment="成员";
-            $table->string('pid')->comment="项目";
-            $table->unsignedInteger('member_status')->comment="人员状态";
-            $table->integer('hour')->default(0)->comment="工时";
-
-            $table->unique(['uid', 'pid']);
+            $table->integer('pid')->index()->comment="项目";
+            $table->date('date')->comment="日期";
+            $table->decimal('cost', 8, 2)->default(0)->nullable()->comment="成本";
+            $table->unique(['uid', 'date']);
             $table->timestamps();
         });
 

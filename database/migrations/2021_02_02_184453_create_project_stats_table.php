@@ -18,6 +18,7 @@ class CreateProjectStatsTable extends Migration
             $table->integer('pid')->index()->comment="";
             $table->decimal('cost')->default(0)->comment="成本";
             $table->decimal('day_cost')->default(0)->comment="日成本";
+            $table->decimal('avg_cost')->default(0)->comment="平均成本";
             $table->string('mark')->nullable()->comment="备注";
             $table->timestamps();
         });
@@ -28,16 +29,6 @@ class CreateProjectStatsTable extends Migration
             $table->unsignedInteger('uid')->index()->comment="成员id";
             $table->integer('hour')->default(0)->comment="工时";
             $table->integer('cost')->default(0)->comment="成本";
-            $table->timestamps();
-        });
-
-        Schema::create('project_member_logs', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->date('date')->comment="时间";
-            $table->integer('pid')->comment="项目id";
-            $table->unsignedInteger('uid')->comment="成员id";
-            $table->decimal('day_cost')->default(0)->comment="成员id";
-
             $table->timestamps();
         });
     }

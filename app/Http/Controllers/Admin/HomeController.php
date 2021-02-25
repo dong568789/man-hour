@@ -33,6 +33,10 @@ class HomeController extends Controller
                 $tpl = "pm";
                 $pmUid = Auth::user()->id;
                 break;
+            case 'project-member':
+                $this->member($request, $user);
+                $tpl = "member";
+                break;
             case 'finance':
                 $this->finance($request, $user);
                 $tpl = "finance";
@@ -42,7 +46,12 @@ class HomeController extends Controller
         }
 
 	    $repo = new ProjectRepository();
-	    $this->_projects = $repo->projects($pmUid);
+
+        $projects = $repo->projects($pmUid)->toArray();
+
+        $repo->style($projects);
+
+        $this->_projects = $projects;
         $this->_tpl = $tpl;
 		return $this->view('admin.dashboard');
 	}
@@ -67,15 +76,24 @@ class HomeController extends Controller
         $paRepo = new ProjectApplyRepository();
         $pids = $user->project->modelKeys();
 
-        $request->offsetSet('f', ['to_pid' => ['in' => $pids], 'apply_status' => $applying]);
+        $request->offsetSet('f', ['pid' => ['in' => $pids], 'apply_status' => $applying]);
         $data = $paRepo->data($request);
 
-        //dd($data);
+        $this->_messages = $data['data'];
+    }
+
+    private function member(Request $request, User $user)
+    {
+        $paRepo = new ProjectApplyRepository();
+
+        $request->offsetSet('f', ['uid' => $user->id]);
+        $data = $paRepo->data($request);
+
         $this->_messages = $data['data'];
     }
 
     private function finance(Request $request, User $user)
     {
-
+        $this->_messages = [];
     }
 }

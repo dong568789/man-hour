@@ -45,14 +45,14 @@ class ProjectMemberRepository extends Repository {
 	public function destroy(array $ids)
 	{
 		DB::transaction(function() use ($ids) {
-            ProjectMember::where('id', $ids)->update(['member_status'=> catalog_search('status.member_status.deleted', 'id')]);
+            ProjectMember::destroy($ids);
 		});
 	}
 
 	public function data(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$model = new ProjectMember;
-		$builder = $model->newQuery()->with([]);
+		$builder = $model->newQuery()->with(['project', 'member']);
 
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);
@@ -65,7 +65,7 @@ class ProjectMemberRepository extends Repository {
 	public function export(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$model = new ProjectMember;
-		$builder = $model->newQuery()->with([]);
+		$builder = $model->newQuery()->with(['project', 'member']);
 		$size = $request->input('size') ?: config('size.export', 1000);
 
 		$data = $this->_getExport($request, $builder, $callback, $columns);
@@ -74,42 +74,49 @@ class ProjectMemberRepository extends Repository {
 	}
 
     /**
+     * 项目各成员 总工时
+     * @param int $pid
+     * @return mixed
+     */
+	public function countMemberHourByPid(int $pid)
+    {
+        return ProjectMember::with(['member'])->where('pid', $pid)->groupBy('uid')->select([DB::raw('count(id) as hour'), 'uid'])->get();
+    }
+
+    /**
      * 获取用户正常 的项目
      * @param int $uid
      * @return mixed
      */
-	public function normalProjectByUid(int $uid)
+	public function checkHour(int $uid, array $dates)
     {
-	    $normal = catalog_search('status.member_status.normal', 'id');
-        return ProjectMember::with(['member', 'project'])->where('uid', $uid)
-            ->where('member_status', $normal)
+        return ProjectMember::where('uid', $uid)
+            ->whereIn('date', $dates)
             ->first();
     }
 
-    public function updateStatus(array $user_ids)
+    /**
+     * 写入工时
+     * @param int $uid
+     * @param int $pid
+     * @param array $dates
+     * @param float $cost
+     * @return bool
+     */
+    public function updateMember(int $uid, int $pid, array $dates, float $cost = 0)
     {
-        $going = catalog_search('status.member_status.going', 'id');
-        $normal = catalog_search('status.member_status.normal', 'id');
-        return ProjectMember::whereIn('uid', $user_ids)->where('member_status', $normal)->update(['member_status' =>
-            $going]);
-    }
-
-    public function updateMember(int $pid, array $member_ids)
-    {
-        $uids = ProjectMember::where('pid', $pid)->get()->pluck('uid')->toArray();
-        $diff = array_diff($uids, $member_ids);
-        $this->deleteMember($pid, $diff);
-
-        if (empty($member_ids)) return false;
-        $paRepo = new ProjectApplyRepository();
-        $paRepo->apply(['pid' => $pid, 'member_ids' => $member_ids]);
+        $dates = array_unique($dates);
+        foreach ($dates as $date) {
+            $this->store([
+                'uid' => $uid,
+                'pid' => $pid,
+                'date' => $date,
+                'cost' => $cost//当前成本
+            ]);
+        }
         return true;
     }
 
-    public function deleteMember(int $pid, array $member_ids)
-    {
-        return ProjectMember::whereIn('uid', $member_ids)->where('pid', $pid)->delete();
-    }
 
     public function createOrUpdate($data, $opt)
     {
@@ -119,11 +126,8 @@ class ProjectMemberRepository extends Repository {
         });
     }
 
-    public function incrementHour(int $pid)
+    public function myProject(int $uid)
     {
-        $normal = catalog_search('status.member_status.normal', 'id');
-        return ProjectMember::where('pid', $pid)
-            ->where('member_status', $normal)
-            ->increment('hour');
+        return ProjectMember::where('uid', $uid)->groupBy('pid')->select(['pid'])->get()->pluck('pid');
     }
 }

@@ -24,10 +24,7 @@ class Project extends Model
 
     public function members()
     {
-        return $this->belongsToMany("App\\User", 'project_members', 'pid', 'uid')
-            ->wherePivotIn('member_status', [catalog_search('status.member_status.going', 'id'), catalog_search('status.member_status.normal', 'id')])
-            ->withPivot('member_status', 'hour', 'id')
-            ->withTimestamps();
+        return $this->belongsToMany("App\\User", 'project_members', 'pid', 'uid');
     }
 
     public function scopeOfMember(Builder $builder, $uid)

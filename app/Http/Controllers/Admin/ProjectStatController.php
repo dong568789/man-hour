@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\ProjectRepository;
 use Auth;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
@@ -43,7 +44,15 @@ class ProjectStatController extends Controller {
 
     public function data(Request $request)
     {
-        $data = $this->repo->data($request);
+        $pRepo = new ProjectRepository();
+        $progress = catalog_search('status.project_status.progress', 'id');
+
+        $data = $this->repo->data($request, function ($items) use($pRepo, $progress) {
+            foreach ($items as $item) {
+                $pRepo->setStyle($item['project'], $progress);
+            }
+        });
+
         return $this->api($data);
     }
 

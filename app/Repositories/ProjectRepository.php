@@ -18,7 +18,7 @@ class ProjectRepository extends Repository {
 
 	public function find($id, array $columns = ['*'])
 	{
-		return Project::with(['members'])->find($id, $columns);
+		return Project::with([])->find($id, $columns);
 	}
 
 	public function findOrFail($id, array $columns = ['*'])
@@ -42,24 +42,6 @@ class ProjectRepository extends Repository {
 		});
 	}
 
-    public function forceUpdateMember(Model $model, array $data)
-    {
-        $pmRepo = new ProjectMemberRepository();
-        return DB::transaction(function() use ($model, $data, $pmRepo){
-            $normal = catalog_search('status.member_status.normal', 'id');
-
-            if (empty($data['member_ids'])) return false;
-
-            $pmRepo->updateStatus($data['member_ids']);
-
-            foreach ($data['member_ids'] as $uid) {
-                $pmRepo->createOrUpdate(['uid' => $uid, 'pid' => $model->id], ['member_status' =>
-                    $normal]);
-            }
-            return true;
-        });
-    }
-
 	public function destroy(array $ids)
 	{
 		DB::transaction(function() use ($ids) {
@@ -70,13 +52,11 @@ class ProjectRepository extends Repository {
 	public function data(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$model = new Project;
-		$builder = $model->newQuery()->with(['members', 'pm']);
+		$builder = $model->newQuery()->with(['pm']);
 
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);
         $this->style($data['data']);
-
-
 		$data['recordsTotal'] = $total; //不带 f q 条件的总数
 		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 
@@ -96,28 +76,27 @@ class ProjectRepository extends Repository {
 
 	public function projects(int $pm_uid = 0)
     {
-        //$progress = catalog_search('status.project_status.progress', 'id');
-        $builder = Project::with(['members', 'pm']);
+        $builder = Project::with(['pm']);
         !empty($pm_uid) && $builder->where('pm_uid', $pm_uid);
         return $builder->orderBy('id', 'desc')
             ->get();
     }
 
-    public function style(&$items)
+    public function style(&$projects)
     {
-        $normal = catalog_search('status.member_status.normal', 'id');
-        $going = catalog_search('status.member_status.going', 'id');
-        $deleted = catalog_search('status.member_status.normal', 'id');
-        foreach ($items as &$item) {
-            foreach ($item['members'] as &$member) {
-                if ($member['pivot']['member_status'] == $normal) {
-                    $member['style'] = "label label-success";
-                } elseif ($member['pivot']['member_status'] == $going) {
-                    $member['style'] = "label label-warning";
-                } elseif ($member['pivot']['member_status'] == $deleted) {
-                    $member['style'] = "label label-default";
-                }
-            }
+        $progress = catalog_search('status.project_status.progress', 'id');
+        foreach ($projects as &$project) {
+
+            $this->setStyle($project, $progress);
+        }
+    }
+
+    public function setStyle(&$project, $status)
+    {
+        if ($project['project_status']['id'] == $status) {
+            $project['style'] = "label label-danger";
+        } else {
+            $project['style'] = "label label-default";
         }
     }
 }

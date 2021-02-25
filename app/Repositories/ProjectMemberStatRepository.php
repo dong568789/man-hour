@@ -93,15 +93,11 @@ class ProjectMemberStatRepository extends Repository {
      * @param int $hour
      * @param int $cost 成本
      */
-    public function createOrUpdate(int $pid, int $uid, int $cost, int $hour = 1)
+    public function createOrUpdate(int $pid, int $uid, float $cost, int $hour = 1)
     {
-        $pms = ProjectMemberStat::where('pid', $pid)->where('uid', $uid)->first();
-        if (empty($pms)){
-            $this->store(['pid' => $pid, 'uid' => $uid, 'cost' => $cost, 'hour' => $hour]);
-        } else {
-            $pms->increment('cost', $cost);
-            $pms->increment('hour');
-        }
+        return DB::transaction(function() use ($pid, $uid, $cost, $hour) {
+            return ProjectMemberStat::updateOrCreate(['pid' => $pid, 'uid' => $uid], ['cost' => $cost, 'hour' => $hour]);
+        });
     }
 
     public function _getOther(Request $request, Builder $builder)

@@ -33,7 +33,7 @@
 <{block "table-td-plus"}>
 <td data-from="username">{{data}}</td>
 <td data-from="realname">{{data}}</td>
-<td data-from="post">{{if data}}<span class="label label-danger">{{data.title}}</span>{{/if}}</td>
+<td data-from="post">{{if data}}<span class="label label-primary">{{data.title}}</span>{{/if}}</td>
 <td data-from="phone">{{data}}</td>
 <td data-from="roles" data-orderable="false">
 {{each data as v k}}
