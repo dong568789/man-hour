@@ -70,9 +70,11 @@
 		<li>
 			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">项目管理 <i class="fa fa-angle-down"></i></a>
 			<ul class="dropdown-menu">
-				<li><a href="<{'admin/project'|url}>"><i class="fa fa-list fa-fw pull-right"></i>
+				<li><a href="<{'admin/project'|url}>" name="project/list"><i class="fa fa-list fa-fw
+				pull-right"></i>
 						项目列表</a></li>
-				<li><a href="<{'admin/project/create'|url}>"><i class="fa fa-plus fa-fw pull-right"></i>
+				<li><a href="<{'admin/project/create'|url}>" name="project/create"><i class="fa fa-plus fa-fw
+				pull-right"></i>
 						添加项目</a></li>
 			</ul>
 		</li>
@@ -82,16 +84,18 @@
 			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">财务管理 <i
 						class="fa fa-angle-down"></i></a>
 			<ul class="dropdown-menu">
-				<li><a href="<{'admin/project-stat'|url}>"><i class="fa fa-bar-chart fa-fw pull-right"></i>
+				<li><a href="<{'admin/project-stat'|url}>" name="project-stat/list"><i class="fa fa-bar-chart fa-fw
+				pull-right"></i>
 						项目统计</a></li>
-				<li><a href="<{'admin/project-member-stat'|url}>"><i class="fa fa-bar-chart fa-fw pull-right"></i>
+				<li><a href="<{'admin/project-member-stat'|url}>" name="project-member-stat/list"><i class="fa
+				fa-bar-chart fa-fw pull-right"></i>
 						成员统计</a></li>
 			</ul>
 		</li>
 		<{/if}>
-		<li><a href="<{'admin/project-apply'|url}>">
+		<li><a href="<{'admin/project-apply'|url}>" name="project-apply/list">
 				申请记录</a></li>
-		<li><a href="<{'admin/project-member'|url}>">
+		<li><a href="<{'admin/project-member'|url}>" name="project-member/list">
 				工时明细</a></li>
 		<{pluginclude file="admin/menubar.inc.tpl"}>
 	</ul>
