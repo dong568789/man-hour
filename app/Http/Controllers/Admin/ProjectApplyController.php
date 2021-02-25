@@ -72,8 +72,8 @@ class ProjectApplyController extends Controller {
         $keys = ['pid', 'dates'];
         $data = $this->censor($request, 'projectApply.apply', $keys);
 
+        $data['dates'] = json_decode($data['dates'], true);
         $result = $this->repo->apply($data);
-
         if (!$result['status']) {
             return $this->error($result['msg']);
         }
@@ -103,8 +103,10 @@ class ProjectApplyController extends Controller {
         $data = $this->censor($request, 'projectApply.store', $keys, $projectApply);
 
         $data['operator_uid'] = Auth::user()->id;
-        $project = $this->repo->update($projectApply, $data);
-
+        $return = $this->repo->update($projectApply, $data);
+        if (is_string($return)) {
+            return $this->error($return);
+        }
         return $this->success();
     }
 

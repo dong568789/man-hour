@@ -14,7 +14,7 @@ return [
     'apply' => [
         'dates' => [
             'name' => '申报时间',
-            'rules' => 'required|array'
+            'rules' => 'required'
         ],
         'pid' => [
             'name' => '项目',

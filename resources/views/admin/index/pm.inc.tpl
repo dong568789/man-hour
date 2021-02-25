@@ -50,12 +50,33 @@
                             <{$message.message}>
                         </td>
                         <td class="text-center">
-                            <button ref="<{$message.id}>" class="btn btn-xs btn-success"
-                                    onclick="applyMember
-									(1, this)"> 同意</button>
-                            <button class="btn btn-xs btn-danger"
-                                    data-toggle="modal"
-                                    data-target="#rejectModal" onclick="setFormUrl(<{$message.id}>)"> 拒绝</button>
+                            <a data-toggle="modal"
+                               data-target="#infoModal"
+                               href="<{url('admin/project-apply', [$message.id])}>"
+                               class="btn btn-xs btn-success"> 查看</a>
+                            <div class="btn-group" role="group">
+                                <div class="btn-group  btn-group-xs" role="group">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false"  style="border-radius: 0px">
+                                        审核 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="<{url('admin/project-apply')}>/<{$message.id}>"
+                                               method="PUT"
+                                               confirm="确认审核通过吗？"
+                                               data-toggle="tooltip"
+                                               selector="#apply_status"
+                                               title="同意"
+                                            >通过</a></li>
+                                        <li><a href="javascript:void(0);"
+                                               title="拒绝"
+                                               data-toggle="modal"
+                                               data-target="#rejectModal"
+                                               onclick="setFormUrl(<{$message.id}>)"
+                                            >拒绝</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     <{/foreach}>
@@ -67,12 +88,12 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" name="status" id="apply_status" value="1">
 <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="height: 300px;overflow: scroll;">
             <div class="modal-header">
-                <button type="button" class="close" id="closeLog" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">拒绝理由</h4>
             </div>
             <div class="modal-body">
@@ -96,11 +117,17 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="height: 250px;overflow: scroll;">
+
+        </div>
+    </div>
+</div>
 <script>
     (function($){
 
         $('#formReject').query(function (resp) {
-            console.log(resp);
             if (resp.result == "success") {
                 $('#rejectModal').modal('hide');
                 window.location.reload();
@@ -108,6 +135,12 @@
                 alert(resp.message.content);
             }
         }, 3);
+        $(document).on('hidden.bs.modal', '#infoModal', function(){
+            $(this).removeData("bs.modal");
+            $(this).find('.modal-content').children().remove();
+        });
+        //审核通过
+        $('a[method]:not([method="delete"])', 'body').query();
     })(jQuery);
 
     function applyMember(flag, t) {
@@ -125,7 +158,6 @@
             LP.tip.toast_interface({content: err.$json.message});
         });
     }
-
 
     function setFormUrl(id){
         jQuery('form', '#rejectModal').attr('action', '<{url('admin/project-apply')}>/' + id);

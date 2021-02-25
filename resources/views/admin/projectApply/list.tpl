@@ -40,6 +40,7 @@
                        method="PUT"
                        confirm="确认审核通过吗？"
                        data-toggle="tooltip"
+                       selector="#apply_status"
                        title="同意"
                     >通过</a></li>
                 <li><a href="javascript:void(0);"
@@ -63,6 +64,8 @@
 <{block "table-td-options-delete-confirm"}>您确定删除这项：{{full.username}}吗？<{/block}>
 
 <{block "body-plus"}>
+    <input type="hidden" name="status" id="apply_status" value="1">
+
     <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="height: 250px;overflow: scroll;">
@@ -118,7 +121,6 @@
         });
 
         $('#formReject').query(function (resp) {
-            console.log(resp);
             if (resp.result == "success") {
                 $('#rejectModal').modal('hide');
                 $('#reload').trigger('click');

@@ -37,24 +37,34 @@ class ProjectApplyRepository extends Repository {
 	public function update(Model $model, array $data)
 	{
 		return DB::transaction(function() use ($model, $data){
-		    if ($data['status'] == 1) {
-		        $status = catalog_search('status.apply_status.pass', 'id');
-		        //审核通过流程
-		        $this->audit($model);
-            } else {
-                $status = catalog_search('status.apply_status.reject', 'id');
+		    try {
+                if ($data['status'] == 1) {
+                    $status = catalog_search('status.apply_status.pass', 'id');
+                    //审核通过流程
+                    $this->audit($model);
+                } else {
+                    $status = catalog_search('status.apply_status.reject', 'id');
+                }
+                unset($data['status']);
+                $data = $data +  ['apply_status' => $status];
+                $model->update($data);
+                return $model;
+            } catch (\Exception $e) {
+		        return $e->getMessage();
             }
-		    unset($data['status']);
-            $data = $data +  ['apply_status' => $status];
-			$model->update($data);
-			return $model;
 		});
 	}
 
     public function audit(Model $model)
     {
         if (empty($model->dates)){
-            return;
+            throw new \Exception("申报日期不能为空");
+        }
+        $pmRepo = new ProjectMemberRepository();
+        $pm = $pmRepo->checkHour($model->uid, $model->dates);
+
+        if (!empty($pm)) {
+            throw new \Exception("重复提交的时间【" . $pm->date . "】");
         }
         $pmRepo = new ProjectMemberRepository();
         $pmRepo->updateMember($model->uid, $model->pid, $model->dates, $model->member->cost);
