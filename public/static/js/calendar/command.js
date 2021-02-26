@@ -19,6 +19,7 @@
         var a = new Date();
         var b = a.getFullYear();
         var c = a.getMonth();
+
         var rc = c + 1;
         var html1 = ``;
         $('.items-scroll').empty();
@@ -26,9 +27,9 @@
         for (var i = 1; i >= 0; i--) {
             //如果5月后的月数大于12
             if (rc - i >= 1) {
-                //如果5月后的月数小于10（主要用于保持月份格式是2位数）
+                //（主要用于保持月份格式是2位数）
+                var rc3 = rc - i
                 if(rc - i < 10) {
-                    var rc3 = rc - i
                     html1 = `<div class="item" data-year="${b}" data-month="${rc3}" onclick="getCalendar(this,${b},${rc3-1})">${b}.${'0'+rc3}<div class="normal "></div>
         </div>`
                 } else {
