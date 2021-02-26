@@ -15,7 +15,7 @@ return [
 		],
 		'realname' => [
 			'name' => '真实姓名',
-			'rules' => 'ansi:2|regex:/^[a-z\x{4e00}-\x{9fa5}\x{f900}-\x{fa2d}\s]*$/iu|max:50|min:3',
+			'rules' => 'required|ansi:2|regex:/^[a-z\x{4e00}-\x{9fa5}\x{f900}-\x{fa2d}\s]*$/iu|max:50|min:3',
 			'message' => [
 				'regex' => '[:attribute] 必须为汉字、英文'
 			],

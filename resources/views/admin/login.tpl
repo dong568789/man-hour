@@ -23,7 +23,7 @@
 				<div id="login-alt-container">
 					<!-- Title -->
 					<h1 class="push-top-bottom">
-						<small>管理系统</small>
+						<small>工时管理系统</small>
 					</h1>
 					<!-- END Title -->
 
@@ -43,9 +43,7 @@
 					<!-- END Key Features -->
 
 					<!-- Footer -->
-					<footer class="text-muted push-top-bottom">
-						<small><span id="year-copy"></span> &copy; <a href="https://git.load-page.com/r/lp/" target="_blank">Laravel plus (L+) v6.0</a></small>
-					</footer>
+
 					<!-- END Footer -->
 				</div>
 			</div>

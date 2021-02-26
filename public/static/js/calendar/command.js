@@ -29,17 +29,17 @@
                 //如果5月后的月数小于10（主要用于保持月份格式是2位数）
                 if(rc - i < 10) {
                     var rc3 = rc - i
-                    html1 = `<div class="item" data-year="${b}" data-month="${rc3}" onclick="getCalendar(this,${b},${rc3})">${b}.${'0'+rc3}<div class="normal "></div>
+                    html1 = `<div class="item" data-year="${b}" data-month="${rc3}" onclick="getCalendar(this,${b},${rc3-1})">${b}.${'0'+rc3}<div class="normal "></div>
         </div>`
                 } else {
-                    html1 = `<div class="item" data-year="${b}" data-month="${rc3}" onclick="getCalendar(this,${b},${rc3})">${b}.${rc3}<div class="normal "></div>
+                    html1 = `<div class="item" data-year="${b}" data-month="${rc3}" onclick="getCalendar(this,${b},${rc3-1})">${b}.${rc3}<div class="normal "></div>
         </div>`
                 }
             } else {
 
                 console.log("b", b-1);
                 var rc2 = rc - i + 12;
-                html1 = `<div class="item" data-year="${b-1}" data-month="${rc2}" onclick="getCalendar(this,${b-1},${rc2})">${b-1}.${rc2}<div class="normal "></div>
+                html1 = `<div class="item" data-year="${b-1}" data-month="${rc2}" onclick="getCalendar(this,${b-1},${rc2-1})">${b-1}.${rc2}<div class="normal "></div>
       </div>`
             }
             $('.items-scroll').append(html1)
@@ -60,12 +60,7 @@ function getCalendar(obj, b, c) {
     var T_year = T_today.getFullYear();
     var T_month = T_today.getMonth() + 1;
     var T_date = T_today.getDate();
-    var list1 = []
-    var list2 = []
-    var list3 = []
-    var list1s = []
-    var list2s = []
-    var list3s = []
+
     console.log(T_date)
     if (obj == '') {
         _year = new Date().getFullYear();
@@ -77,13 +72,16 @@ function getCalendar(obj, b, c) {
     if (_month < 10) {
         _month = '0' + _month;
     }
-    console.log(_year, _month)
+    console.log("b", b, "c", c)
+    console.log("test", _year, _month)
     jQuery('.d_content2').empty();
     var listMonth = new Array(31, 28 + lYear(b), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
     //计算处理月第一天是周几
     var mD1 = new Date(b, c, 1);
     //md1 ：星期几   mD1：日期格式
     var md1 = mD1.getDay();
+    console.log("mD1", mD1, md1);
+
     //计算日历行数
     tr_str = Math.ceil((md1 + listMonth[c]) / 7);
 
