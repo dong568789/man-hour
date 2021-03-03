@@ -93,14 +93,18 @@ class ProjectStatRepository extends Repository {
 		return $data;
 	}
 
-	public function stat()
+	public function stat(int $pid = 0)
     {
-        DB::transaction(function() {
+        DB::transaction(function() use ($pid){
             $pRepo = new ProjectRepository();
             $pmRepo = new ProjectMemberRepository();
             $pmsRepo = new ProjectMemberStatRepository();
 
-            $projects = $pRepo->projects();
+            if (empty($pid)) {
+                $projects = $pRepo->projects();
+            } else {
+                $projects = collect([$pRepo->find($pid)]);
+            }
 
             foreach ($projects as $project) {
                 $pmList = $pmRepo->countMemberHourByPid($project->id);

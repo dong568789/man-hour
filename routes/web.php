@@ -22,6 +22,7 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
 
     $router->put('member/cost/{id}', 'MemberController@cost')->where('id', '[\d]+');
     $router->post('project/apply', 'ProjectController@apply');
+    $router->post('project/date/{id}', 'ProjectController@date')->where('id', '[\d]+');
 	$router->crud([
 		'member' => 'MemberController',
 		'project' => 'ProjectController',

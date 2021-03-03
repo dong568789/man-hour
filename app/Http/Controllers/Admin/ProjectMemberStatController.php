@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Tools\Helper;
 use Auth;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
@@ -37,18 +38,22 @@ class ProjectMemberStatController extends Controller {
         $this->_filters = $this->repo->_getFilters($request);
         $this->_queries = $this->repo->_getQueries($request);
 
+        $user = Auth::user();
+        $tpl = Helper::getRoleTpl($user);
 
-        return $this->view('admin.projectMemberStat.list');
+        return $this->view('admin.projectMemberStat.list-' . $tpl);
     }
 
     public function data(Request $request)
     {
+        $this->parseRequest($request);
         $data = $this->repo->data($request);
         return $this->api($data);
     }
 
     public function export(Request $request)
     {
+        $this->parseRequest($request);
         $data = $this->repo->export($request);
         $exportData[] = ['项目名称', '成员', '每日成本', '总工时', '总成本', '创建时间'];
         foreach ($data as $key=>$item) {
@@ -122,5 +127,25 @@ class ProjectMemberStatController extends Controller {
 
         $this->repo->destroy($ids);
         return $this->success(null, true, ['id' => $ids]);
+    }
+
+    private function parseRequest(Request $request)
+    {
+        $f = $request->input('f', []);
+
+        $user = Auth::user();
+        $role = $user->roles()->first();
+        $params = [];
+        switch ($role->name) {
+            case 'pm':
+                $params = ['pid' => ['in' => $user->project->modelKeys()]];
+                break;
+            case 'project-member':
+                $params = ['uid' => $user->id];
+                break;
+            default:
+        }
+        $f = array_merge($params, $f);
+        $request->offsetSet('f', $f);
     }
 }

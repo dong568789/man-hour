@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\ProjectApplyRepository;
 use Auth;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
@@ -65,7 +66,7 @@ class ProjectController extends Controller {
             return $this->failure_notexists();
 
         $this->_data = $project;
-
+        $this->_type = 'hour-apply';
         return !$request->offsetExists('of') ? $this->view('admin.project.show') : $this->api($project->toArray());
     }
 
@@ -109,6 +110,64 @@ class ProjectController extends Controller {
         $this->repo->update($project, $data);
 
         return $this->success();
+    }
+
+
+    public function date(Request $request, $id)
+    {
+        $type = $request->input('type');
+        $user = Auth::user();
+
+        if ($type == 'hour-apply') {
+            $data = $this->applyPage($user->id, $id);
+        } elseif ($type == 'audit') {
+            $data = $this->auditPage($id);
+        }
+
+        return $this->api($data);
+    }
+
+    /**
+     * 申请界面
+     * @param int $uid
+     * @param int $pid
+     * @return array
+     */
+    private function applyPage(int $uid, int $pid)
+    {
+        $pmRepo = new ProjectMemberRepository();
+        $paRepo = new ProjectApplyRepository();
+        $enable = $pmRepo->myDate($uid, $pid);
+        $apply = $paRepo->myApply($uid, $pid);
+
+        return [
+            'enabled' => [
+                'style' => 'label label-default disabled',
+                'dates' => $enable
+            ],
+            'apply' => [
+                'style' => 'label label-warning disabled',
+                'dates' => $apply,
+            ]
+        ];
+    }
+
+    /**
+     * 审核界面
+     * @param int $id
+     * @return array
+     */
+    private function auditPage(int $id)
+    {
+        $paRepo = new ProjectApplyRepository();
+        $pa = $paRepo->find($id);
+
+        return [
+            'apply' => [
+                'style' => 'label label-warning disabled',
+                'dates' => !empty($pa) ? $pa->dates : [],
+            ]
+        ];
     }
 
     public function destroy(Request $request, $id)

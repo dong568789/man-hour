@@ -66,7 +66,7 @@
 			</ul>
 		</li>
 		<{/if}>
-		<{if $_permissionTable->checkUserRole(['super', 'finance', 'pm'])}>
+		<{if $_permissionTable->checkUserRole(['super', 'pm'])}>
 		<li>
 			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">项目管理 <i class="fa fa-angle-down"></i></a>
 			<ul class="dropdown-menu">
@@ -80,22 +80,13 @@
 		</li>
 		<{/if}>
 		<{if $_permissionTable->checkUserRole(['super', 'finance'])}>
-		<li>
-			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">财务管理 <i
-						class="fa fa-angle-down"></i></a>
-			<ul class="dropdown-menu">
-				<li><a href="<{'admin/project-stat'|url}>" name="project-stat/list"><i class="fa fa-bar-chart fa-fw
-				pull-right"></i>
-						项目统计</a></li>
-				<li><a href="<{'admin/project-member-stat'|url}>" name="project-member-stat/list"><i class="fa
-				fa-bar-chart fa-fw pull-right"></i>
-						成员统计</a></li>
-			</ul>
-		</li>
+		<li><a href="<{'admin/project-stat'|url}>" name="project-stat/list">项目统计</a></li>
 		<{/if}>
+		<{if $_permissionTable->checkUserRole(['super', 'pm', 'project-member'])}>
 		<li><a href="<{'admin/project-apply'|url}>" name="project-apply/list">
 				申请记录</a></li>
-		<li><a href="<{'admin/project-member'|url}>" name="project-member/list">
+		<{/if}>
+		<li><a href="<{'admin/project-member-stat'|url}>" name="project-member-stat/list">
 				工时明细</a></li>
 		<{pluginclude file="admin/menubar.inc.tpl"}>
 	</ul>

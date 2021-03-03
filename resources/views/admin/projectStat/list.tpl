@@ -45,6 +45,7 @@
         })(jQuery);
     </script>
 <{/block}>
+<{block "table-tools-dropdown-operate"}><{/block}>
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
 <{block "table-th-timestamps-updated_at"}><{/block}>

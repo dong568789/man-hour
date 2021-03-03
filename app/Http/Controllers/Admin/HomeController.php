@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\ProjectMemberRepository;
 use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -88,6 +89,8 @@ class HomeController extends Controller
 
         $request->offsetSet('f', ['uid' => $user->id]);
         $data = $paRepo->data($request);
+
+        $this->_myStat = (new ProjectMemberRepository)->countMemberHourByUid($user->id);
 
         $this->_messages = $data['data'];
     }

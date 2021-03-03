@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Tools\Helper;
 use Auth;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
@@ -33,29 +34,14 @@ class ProjectApplyController extends Controller {
         $size = $request->input('size') ?: $this->repo->prePage();
 
         $user = Auth::user();
-        $role = $user->roles()->first();
-        switch ($role->name) {
-            case 'pm':
-                $tpl = "list";
-                break;
-            case 'super':
-                $tpl = "list";
-                break;
-            case 'finance':
-                $tpl = "member";
-                break;
-            case 'project-member':
-                $tpl = "member";
-                break;
-            default:
-        }
+        $tpl = Helper::getRoleTpl($user);
 
         //view's variant
         $this->_size = $size;
         $this->_filters = $this->repo->_getFilters($request);
         $this->_queries = $this->repo->_getQueries($request);
 
-        return $this->view('admin.projectApply.' . $tpl);
+        return $this->view('admin.projectApply.list-' . $tpl);
     }
 
     public function data(Request $request)
@@ -63,7 +49,6 @@ class ProjectApplyController extends Controller {
         $this->parseRequest($request);
         $data = $this->repo->data($request);
 
-        $this->repo->style($data['data']);
         return $this->api($data);
     }
 
@@ -73,6 +58,7 @@ class ProjectApplyController extends Controller {
         $data = $this->censor($request, 'projectApply.apply', $keys);
 
         $data['dates'] = json_decode($data['dates'], true);
+
         $result = $this->repo->apply($data);
         if (!$result['status']) {
             return $this->error($result['msg']);
@@ -89,8 +75,12 @@ class ProjectApplyController extends Controller {
         $paArr = $pa->toArray();
 
         $this->repo->setStyle($paArr, catalog_search('status.apply_status.applying', 'id'), catalog_search('status.apply_status.pass', 'id'), catalog_search('status.apply_status.reject', 'id'));
+        $user = Auth::user();
+        $tpl = Helper::getRoleTpl($user);
         $this->_data = $paArr;
-        return !$request->offsetExists('of') ? $this->view('admin.projectApply.show') : $this->api($paArr);
+        $this->_type = "audit";
+        $this->_allMonth = json_encode(Helper::uniqueMonth($paArr['dates']));
+        return !$request->offsetExists('of') ? $this->view('admin.projectApply.show-' . $tpl) : $this->api($paArr);
     }
 
     public function update(Request $request, $id)

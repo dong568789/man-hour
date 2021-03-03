@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
@@ -84,6 +85,19 @@ class ProjectMemberRepository extends Repository {
     }
 
     /**
+     * 项目各成员 总工时
+     * @param int $uid
+     * @return mixed
+     */
+    public function countMemberHourByUid(int $uid)
+    {
+        return ProjectMember::with(['project'])
+            ->where('uid', $uid)
+            ->groupBy('pid')
+            ->select([DB::raw('count(id) as hour'), 'pid'])->get();
+    }
+
+    /**
      * 获取用户正常 的项目
      * @param int $uid
      * @return mixed
@@ -129,5 +143,21 @@ class ProjectMemberRepository extends Repository {
     public function myProject(int $uid)
     {
         return ProjectMember::where('uid', $uid)->groupBy('pid')->select(['pid'])->get()->pluck('pid');
+    }
+
+    /**
+     * 最近两个月，我的工时
+     * @param int $uid
+     * @param int $pid
+     * @return mixed
+     */
+    public function myDate(int $uid, int $pid)
+    {
+        $at = Carbon::now();
+
+        $start = $at->copy()->subMonth(1);
+        return ProjectMember::where('pid', $pid) ->where('uid', $uid)->whereBetween('date', [$start, $at])->get()->pluck
+        ('date')->toArray();
+
     }
 }

@@ -1,6 +1,6 @@
 <{extends file="admin/extends/list.block.tpl"}>
 
-<{block "title"}>项目明细<{/block}>
+<{block "title"}>工时统计<{/block}>
 
 <{block "name"}>project-member-stat<{/block}>
 
@@ -37,8 +37,15 @@
         })(jQuery);
     </script>
 <{/block}>
-<{block "table-th-options"}><{/block}>
-<{block "table-td-options"}><{/block}>
+
+<{block "table-td-options-after"}>
+    <a href="<{''|url}>/admin/project-member?f[uid]={{full.uid}}&f[pid]={{full.pid}}" title="明细" class="btn btn-xs btn-success"><i
+                class="fa fa-list"></i> 明细</a>
+    <{/block}>
+
+
+<{block "table-td-options-edit"}><{/block}>
+<{block "table-td-options-delete"}><{/block}>
 <{block "table-tools-create"}><{/block}>
 <{block "table-th-timestamps-updated_at"}><{/block}>
 <{block "table-td-timestamps-updated_at"}><{/block}>

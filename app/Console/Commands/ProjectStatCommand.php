@@ -14,7 +14,7 @@ class ProjectStatCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'project:stat {--date= : Start of date, format: Y-m-d (eg: 2000-01-01)}';
+    protected $signature = 'project:stat {--pid= : project id}';
 
     /**
      * The console command description.
@@ -40,11 +40,9 @@ class ProjectStatCommand extends Command
      */
     public function handle()
     {
-        $date = $this->option('date');
-        $at = Carbon::parse($date);
-
+        $pid = $this->option('pid') ?: 0;
         $psRepo = new ProjectStatRepository();
 
-        $psRepo->stat();
+        $psRepo->stat($pid);
     }
 }

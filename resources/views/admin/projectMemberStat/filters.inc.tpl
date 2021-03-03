@@ -1,6 +1,6 @@
 <!-- Form Content -->
 <form action="<{'admin'|url nofilter}>/<{block "name"}><{/block}>/" method="GET" class="form-bordered form-horizontal">
-	<div class="form-group col-sm-3">
+	<div class="form-group col-sm-4">
 		<label class="col-md-3 control-label" for="name">项目名称</label>
 		<div class="col-md-9">
 				<select type="text" id="pid" name="f[pid]" class="form-control select-model"
@@ -8,7 +8,7 @@
 						data-text="{{name}}" data-placeholder="请输入关键词..." value="<{$_filters.pid.eq}>"></select>
 		</div>
 	</div>
-	<div class="form-group col-sm-3">
+	<div class="form-group col-sm-4">
 		<label class="col-md-3 control-label" for="member_id">项目成员</label>
 		<div class="col-md-9">
 			<select type="text" id="uid" name="f[uid]" class="form-control select-model"

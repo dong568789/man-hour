@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Jobs\StatHour;
 use DB,Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
@@ -42,12 +44,16 @@ class ProjectApplyRepository extends Repository {
                     $status = catalog_search('status.apply_status.pass', 'id');
                     //审核通过流程
                     $this->audit($model);
+
+                    //审核通过，更新统计数据
+                    dispatch((new StatHour($model->pid)));
                 } else {
                     $status = catalog_search('status.apply_status.reject', 'id');
                 }
                 unset($data['status']);
                 $data = $data +  ['apply_status' => $status];
                 $model->update($data);
+
                 return $model;
             } catch (\Exception $e) {
 		        return $e->getMessage();
@@ -85,7 +91,10 @@ class ProjectApplyRepository extends Repository {
 
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);
-		$data['recordsTotal'] = $total; //不带 f q 条件的总数
+
+        $this->style($data['data']);
+
+        $data['recordsTotal'] = $total; //不带 f q 条件的总数
 		$data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 
 		return $data;
@@ -153,5 +162,25 @@ class ProjectApplyRepository extends Repository {
         } elseif ($pa['apply_status']['id'] == $status[2]) {
             $pa['style'] = "label label-default";
         }
+    }
+
+    /**
+     * 最近两月，我的申报
+     * @param int $uid
+     * @param int $pid
+     * @return mixed
+     */
+    public function myApply(int $uid, int $pid)
+    {
+        $at = Carbon::now();
+        $start = $at->copy()->subMonth(1);
+        $status = catalog_search('status.apply_status.applying', 'id');
+        $pas = ProjectApply::where('pid', $pid)
+            ->where('uid', $uid)
+            ->where('apply_status', $status)
+            ->whereBetween('created_at', [$start, $at])
+            ->get()->pluck('dates');
+
+        return $pas->collapse()->unique()->values()->toArray();
     }
 }
