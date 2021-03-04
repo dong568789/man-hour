@@ -88,10 +88,9 @@ class HomeController extends Controller
         $paRepo = new ProjectApplyRepository();
 
         $request->offsetSet('f', ['uid' => $user->id]);
+        $request->offsetSet('size', 20);
         $data = $paRepo->data($request);
-
         $this->_myStat = (new ProjectMemberRepository)->countMemberHourByUid($user->id);
-
         $this->_messages = $data['data'];
     }
 

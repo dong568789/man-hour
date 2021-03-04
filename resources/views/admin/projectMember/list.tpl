@@ -11,14 +11,18 @@
 <{block "table-th-plus"}>
 <th>日期</th>
 <th>项目名称</th>
+<{if !$_permissionTable->checkUserRole(['project-member'])}>
 <th>成员</th>
+<{/if}>
 <{/block}>
 
 <!-- DataTable的Block -->
 <{block "table-td-plus"}>
 <td data-from="date">{{data}}</td>
     <td data-from="project" data-orderable="false">{{if data}}{{data.name}}{{/if}}</td>
-<td data-from="member" data-orderable="false">{{if data}}<span class="label label-danger">{{data.realname}}</span>{{/if}}</td>
+    <{if !$_permissionTable->checkUserRole(['project-member'])}>
+<td data-from="member" data-orderable="false">{{if data}}{{data.realname}}{{/if}}</td>
+    <{/if}>
 <{/block}>
 
 <{block "table-td-options-edit"}><{/block}>
