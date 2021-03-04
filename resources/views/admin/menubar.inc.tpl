@@ -87,7 +87,7 @@
 				申请记录</a></li>
 		<{/if}>
 		<li><a href="<{'admin/project-member-stat'|url}>" name="project-member-stat/list">
-				工时汇总</a></li>
+				工时明细</a></li>
 		<{pluginclude file="admin/menubar.inc.tpl"}>
 	</ul>
 </div>
