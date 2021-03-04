@@ -18,6 +18,8 @@
 					data-text="{{username}}({{post.title}})" data-placeholder="请输入关键词..." value="<{$_filters.uid.eq}>"></select>
 		</div>
 	</div>
+	<{else}>
+	<input type="hidden" name="f[uid]" value="<{$_filters.uid.eq}>">
 	<{/if}>
 	<div class="form-group col-sm-3">
 		<label class="col-md-3 control-label" for="created_at-min">日期</label>

@@ -91,7 +91,7 @@
                         </td>
                         <td class="text-center"><{$stat.hour}></td>
                         <td class="text-center">
-                            <a href="<{url('admin/project-member')}>?f[pid]=<{$stat.pid}>"
+                            <a href="<{url('admin/project-member')}>?f[pid]=<{$stat.pid}>&f[uid]=<{$_user.id}>"
                                class="btn btn-xs btn-success"> 详细</a>
                         </td>
                     </tr>

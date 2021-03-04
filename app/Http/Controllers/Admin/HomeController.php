@@ -54,6 +54,7 @@ class HomeController extends Controller
 
         $this->_projects = $projects;
         $this->_tpl = $tpl;
+        $this->_user = $user;
 		return $this->view('admin.dashboard');
 	}
 
