@@ -105,9 +105,9 @@ class ProjectApplyController extends Controller {
         $f = $request->input('f', []);
 
         $user = Auth::user();
-        $role = $user->roles()->first();
+        $roleName = Helper::roleName($user);
         $params = [];
-        switch ($role->name) {
+        switch ($roleName) {
             case 'pm':
                 $params = ['pid' => ['in' => $user->project->modelKeys()]];
                 break;
@@ -119,5 +119,4 @@ class ProjectApplyController extends Controller {
         $f = array_merge($params, $f);
         $request->offsetSet('f', $f);
     }
-
 }

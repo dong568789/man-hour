@@ -39,6 +39,7 @@
                 class="fa fa-list"></i> 明细</a>
     <{/block}>
 
+<{block "table-tools-dropdown-operate"}><{/block}>
 
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>

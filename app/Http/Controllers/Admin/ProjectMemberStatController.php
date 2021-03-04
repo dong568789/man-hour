@@ -14,7 +14,7 @@ class ProjectMemberStatController extends Controller {
 
     use ApiTrait;
 
-    public $permissions = ['store,update,destroy' => 'finance.update'];
+    public $permissions = ['project-member-stat'];
 
     protected $repo;
 
@@ -55,17 +55,42 @@ class ProjectMemberStatController extends Controller {
     {
         $this->parseRequest($request);
         $data = $this->repo->export($request);
-        $exportData[] = ['项目名称', '成员', '每日成本', '总工时', '总成本', '创建时间'];
+
+        $user = Auth::user();
+
+        if (Helper::isPm($user)) {
+            $exportData[] = ['项目名称', '成员', '总工时', '创建时间'];
+        } elseif (Helper::isMember($user)) {
+            $exportData[] = ['项目名称', '总工时', '创建时间'];
+        } elseif (Helper::isFinance($user) || Helper::isSuper($user)) {
+            $exportData[] = ['项目名称', '成员', '每日成本', '总工时', '总成本', '创建时间'];
+        }
+
         foreach ($data as $key=>$item) {
             if ($key == 0 || $key == 1) continue;
-            $exportData[] = [
-                '项目名称' => $item['project']['name'] ?? '-',
-                '成员' => $item['member']['realname'] ?? '-',
-                '每日成本' => round($item['member']['cost'], 2),
-                '总工时' => $item['hour'],
-                '总成本' => round($item['cost'], 2),
-                '创建时间' => $item['created_at']
-            ];
+            if (Helper::isPm($user)) {
+                $exportData[] = [
+                    '项目名称' => $item['project']['name'] ?? '-',
+                    '成员' => $item['member']['realname'] ?? '-',
+                    '总工时' => $item['hour'],
+                    '创建时间' => $item['created_at']
+                ];
+            } elseif (Helper::isMember($user)) {
+                $exportData[] = [
+                    '项目名称' => $item['project']['name'] ?? '-',
+                    '总工时' => $item['hour'],
+                    '创建时间' => $item['created_at']
+                ];
+            } elseif (Helper::isFinance($user) || Helper::isSuper($user)) {
+                $exportData[] = [
+                    '项目名称' => $item['project']['name'] ?? '-',
+                    '成员' => $item['member']['realname'] ?? '-',
+                    '每日成本' => round($item['member']['cost'], 2),
+                    '总工时' => $item['hour'],
+                    '总成本' => round($item['cost'], 2),
+                    '创建时间' => $item['created_at']
+                ];
+            }
         }
         return $this->office($exportData);
     }
@@ -92,7 +117,7 @@ class ProjectMemberStatController extends Controller {
     {
         $data = $this->censor($request, 'projectMemberStat.store', $this->keys);
 
-        $projectMemberStat = $this->repo->store($data);
+        $this->repo->store($data);
 
         return $this->success('', url('admin/project-member-stat'));
     }
@@ -134,9 +159,10 @@ class ProjectMemberStatController extends Controller {
         $f = $request->input('f', []);
 
         $user = Auth::user();
-        $role = $user->roles()->first();
+
+        $roleName = Helper::roleName($user);
         $params = [];
-        switch ($role->name) {
+        switch ($roleName) {
             case 'pm':
                 $params = ['pid' => ['in' => $user->project->modelKeys()]];
                 break;

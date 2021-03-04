@@ -50,6 +50,7 @@ class ProjectMemberController extends Controller {
 
     public function export(Request $request)
     {
+        $this->parseRequest($request);
         $data = $this->repo->export($request);
         $exportData[] = ['时间', '项目', '成员', '创建时间'];
         foreach ($data as $key=>$item) {

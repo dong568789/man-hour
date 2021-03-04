@@ -30,6 +30,9 @@
     <{block "table-th-options"}><{/block}>
     <{block "table-td-options"}><{/block}>
 <{/if}>
+<{if !$_permissionTable->checkUserRole(['super'])}>
+<{block "table-tools-dropdown-operate"}><{/block}>
+    <{/if}>
 <{block "table-th-timestamps-updated_at"}><{/block}>
 <{block "table-td-timestamps-updated_at"}><{/block}>
 <{block "table-tools-create"}><{/block}>

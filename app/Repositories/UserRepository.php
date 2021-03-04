@@ -146,5 +146,4 @@ class UserRepository extends Repository {
 
 		return $data;
 	}
-
 }

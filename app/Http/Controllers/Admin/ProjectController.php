@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Repositories\ProjectApplyRepository;
+use App\Tools\Helper;
 use Auth;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
@@ -82,7 +83,7 @@ class ProjectController extends Controller {
         $data = $this->censor($request, 'project.store', $this->keys);
 
         $user = Auth::user();
-        $this->isPm($user) && $data['pm_uid'] = $user->id;
+        Helper::isPm($user) && $data['pm_uid'] = $user->id;
         $project = $this->repo->store($data);
 
         return $this->success('', url('admin/project'));
@@ -179,30 +180,13 @@ class ProjectController extends Controller {
         return $this->success(null, true, ['id' => $ids]);
     }
 
-    private function isPm(User $user)
-    {
-        return $this->roleName($user) == 'pm';
-    }
-
-    private function isMember(User $user)
-    {
-        return $this->roleName($user) == 'project-member';
-    }
-
     private function parseRequest(Request $request)
     {
         $f = $request->input('f', []);
         $user = Auth::user();
-        if($this->isPm($user)){
+        if(Helper::isPm($user)){
             $f['pm_uid'] = $user->id;
         }
-
         $request->offsetSet('f', $f);
-    }
-
-    private function roleName(User $user)
-    {
-        $role = $user->roles->first();
-        return array_get($role, 'name');
     }
 }

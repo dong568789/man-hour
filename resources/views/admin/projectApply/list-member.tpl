@@ -31,6 +31,7 @@
     <{/block}>
 <{block "table-th-timestamps-created_at"}><th>申请时间</th><{/block}>
 
+<{block "table-tools-dropdown"}><{/block}>
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
 <{block "table-th-timestamps-updated_at"}><{/block}>

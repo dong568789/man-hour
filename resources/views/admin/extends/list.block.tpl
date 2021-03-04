@@ -101,7 +101,7 @@
 					<li>
 						<{block "table-tools-dropdown-operate-before"}><{/block}>
 						<{block "table-tools-dropdown-operate-delete"}>
-						<{if $_permissionTable->checkMethodPermission('destory')}>
+						<{if $_permissionTable->checkMethodPermission('destroy')}>
 						<a href="<{''|url}>/<{block "namespace"}>admin<{/block}>/<{block "name"}><{/block}>/0" method="delete" selector="#datatable [name='id[]']:checked" confirm="<{block "table-tools-dropdown-delete-confirm"}>您确定删除这%L项？此操作不可恢复！<{/block}>" class="" data-shortcuts="del"><span class="text-danger"><i class="fa fa-times pull-right "></i>删除所选</span></a>
 						<{/if}>
 						<{/block}>
