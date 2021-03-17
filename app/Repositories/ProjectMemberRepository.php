@@ -110,6 +110,23 @@ class ProjectMemberRepository extends Repository {
     }
 
     /**
+     * PM申报
+     */
+    public function pmDeclare(Carbon $at)
+    {
+        $pRepo = new ProjectRepository();
+        $projects = $pRepo->projects();
+
+        foreach ($projects as $project) {
+
+            if (empty($project->pm_uid)) return;
+
+            $this->createOrUpdate(['uid' => $project->pm_uid, 'pid' => $project->id, 'date' => $at->format("Y-m-d")],
+                ['cost' => $project->pm->cost]);
+        }
+    }
+
+    /**
      * 写入工时
      * @param int $uid
      * @param int $pid

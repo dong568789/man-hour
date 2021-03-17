@@ -76,7 +76,8 @@ class ProjectRepository extends Repository {
 
 	public function projects(int $pm_uid = 0)
     {
-        $builder = Project::with(['pm']);
+        $status = catalog_search('status.project_status.progress', 'id');
+        $builder = Project::with(['pm'])->where('project_status', $status);
         !empty($pm_uid) && $builder->where('pm_uid', $pm_uid);
         return $builder->orderBy('id', 'desc')
             ->get();

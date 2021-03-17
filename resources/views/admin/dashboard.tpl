@@ -41,7 +41,7 @@
 						}>"><i class="fa fa-user"></i>PM管理</a></li>
 					<li><a href="<{'admin/member'|url}>?q[ofRole]=<{\App\Role::searchRole('administrator.project-member','id')}>"><i class="fa fa-user"></i> 成员管理</a></li>
 					<{/if}>
-					<{if $_permissionTable->checkUserRole(['super', 'pm', 'finance'])}>
+					<{if $_permissionTable->checkUserRole(['super', 'pm'])}>
 					<li><a href="<{'admin/project'|url}>"><i class="fa fa-users"></i> 项目管理</a></li>
 					<{/if}>
 					<{if $_permissionTable->checkUserRole(['super'])}>
@@ -51,8 +51,9 @@
 					<li><a href="<{'admin/project-stat'|url}>"><i class="fa fa-bar-chart"></i> 项目统计</a></li>
 					<li><a href="<{'admin/project-member-stat'|url}>"><i class="fa fa-bar-chart"></i> 成员统计</a></li>
 					<{/if}>
-					<li><a href="<{'admin/project-member'|url}>"><i class="fa fa-list"></i> 工时明细</a></li>
+					<{if $_permissionTable->checkUserRole(['super', 'project_member', 'pm'])}>
 					<li><a href="<{'admin/project-apply'|url}>"><i class="gi gi-envelope"></i> 申请记录</a></li>
+					<{/if}>
 				</ul>
 			</div>
 			<{include file="admin/index/$_tpl.inc.tpl"}>

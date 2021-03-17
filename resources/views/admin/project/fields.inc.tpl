@@ -30,12 +30,6 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-md-3 control-label" for="cover_id">封面</label>
-			<div class="col-md-9">
-				<input type="hidden" id="cover_id" name="cover_id" class="form-control" value="<{$_data.cover_id|default:0}>">
-			</div>
-		</div>
-		<div class="form-group">
 			<label class="col-md-3 control-label" for="name">项目描述</label>
 			<div class="col-md-9">
 				<textarea name="detail" id="detail" cols="30" rows="10" class="form-control"><{$_data.detail}></textarea>

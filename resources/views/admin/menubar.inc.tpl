@@ -51,7 +51,7 @@
 		<li>
 			<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">用户 <i class="fa fa-angle-down"></i></a>
 			<ul class="dropdown-menu">
-				<{if $_permissionTable->checkUserRole(['super'])}>
+				<{if $_permissionTable->checkUserRole(['super', 'finance'])}>
 				<li><a href="<{'admin/member'|url}>?q[ofRole]=17"><i class="fa fa-user fa-fw pull-right"></i>
 						PM列表</a></li>
 				<{/if}>

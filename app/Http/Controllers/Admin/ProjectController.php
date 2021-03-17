@@ -22,7 +22,7 @@ class ProjectController extends Controller {
 
     protected $repo;
 
-    protected $keys = ['detail', 'name', 'cover_id', 'project_status', 'end_at', 'pm_uid'];
+    protected $keys = ['detail', 'name', 'project_status', 'end_at', 'pm_uid'];
 
     public function __construct(ProjectRepository $repo)
     {
