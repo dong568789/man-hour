@@ -43,11 +43,17 @@ class Kernel extends ConsoleKernel
 
         })->dailyAt('00:00');
 
+
+        $schedule->command('pm:declare')
+            ->dailyAt('00:00')
+            ->appendOutputTo($logPath);
+
+
         /**
          * 每天统计项目成本
          */
         $schedule->command('project:stat --date='.$yesterday->format('Y-m-d'))
-            ->dailyAt('00:10')
+            ->dailyAt('01:00')
             ->appendOutputTo($logPath);
     }
 
