@@ -143,11 +143,11 @@ class ProjectController extends Controller {
 
         return [
             'enabled' => [
-                'style' => 'label label-default disabled',
+                'style' => 'label label-success disabled',
                 'dates' => $enable
             ],
             'apply' => [
-                'style' => 'label label-warning disabled',
+                'style' => 'label label-default disabled',
                 'dates' => $apply,
             ]
         ];
