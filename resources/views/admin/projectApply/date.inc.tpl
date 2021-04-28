@@ -18,9 +18,9 @@
                 <div class="items-scroll"></div>
                 <div class="calendar">
                     <div class="status-act" style="text-align: center;padding: 10px 0px">
-                        <a href="javascript:void(0);" class="btn btn-xs btn-default">已申报</a>
-                        <a href="javascript:void(0);" class="btn btn-xs btn-warning">待审核</a>
-                        <a href="javascript:void(0);" class="btn btn-xs btn-info">待申报</a>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-default">申核中</a>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-success">已通过</a>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-warning">已驳回</a>
                         <{block "hour-audit-widget"}><{/block}>
                     </div>
                     <div class="dateDay">

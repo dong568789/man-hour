@@ -156,11 +156,11 @@ class ProjectApplyRepository extends Repository {
     public function setStyle(&$pa, ...$status)
     {
         if ($pa['apply_status']['id'] == $status[0]) {
-            $pa['style'] = "label label-warning";
-        } elseif ($pa['apply_status']['id'] == $status[1]) {
-            $pa['style'] = "label label-danger";
-        } elseif ($pa['apply_status']['id'] == $status[2]) {
             $pa['style'] = "label label-default";
+        } elseif ($pa['apply_status']['id'] == $status[1]) {
+            $pa['style'] = "label label-success";
+        } elseif ($pa['apply_status']['id'] == $status[2]) {
+            $pa['style'] = "label label-warning";
         }
     }
 

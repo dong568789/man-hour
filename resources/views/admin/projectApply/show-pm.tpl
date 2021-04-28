@@ -4,7 +4,7 @@
     <{block "hour-audit-widget"}>
     <div class="form-group col-sm-4 pull-right text-right">
         <div class="btn-group" role="group">
-            <div class="btn-group  btn-group-xs" role="group">
+            <div class="btn-group" role="group">
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"  style="border-radius: 0px">
                     审核 <span class="caret"></span>
