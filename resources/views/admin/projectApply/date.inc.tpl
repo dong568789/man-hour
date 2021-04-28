@@ -7,6 +7,9 @@
             padding: 0px 5%;
         }
     }
+    .date_Dates .label-success, .date_Dates .label-default{
+        color: #FFF;
+    }
 </style>
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
