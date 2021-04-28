@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Tools\Helper;
 use DB;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;

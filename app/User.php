@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Auth;
+use App\Tools\Helper;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
@@ -89,4 +91,11 @@ class User extends Authenticatable implements AuditableContract
 User::created(function($user){
 	$user->extra()->create([]);
 	$user->finance()->create([]);
+});
+
+User::retrieved(function ($user) {
+    $auth = Auth::user();
+    if(!empty($auth) && (Helper::isPm($auth) || Helper::isMember($auth))) {
+        $user->addHidden('cost');
+    }
 });

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Auth;
 use App\Model;
+use App\Tools\Helper;
 
 class ProjectMember extends Model
 {
@@ -23,3 +25,9 @@ class ProjectMember extends Model
     }
 }
 
+ProjectMember::retrieved(function ($user) {
+    $auth = Auth::user();
+    if(!empty($auth) && (Helper::isPm($auth) || Helper::isMember($auth))) {
+        $user->addHidden(['cost', 'day_cost']);
+    }
+});

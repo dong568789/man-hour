@@ -48,6 +48,10 @@ class ProjectMemberStatController extends Controller {
     {
         $this->parseRequest($request);
         $data = $this->repo->data($request);
+        $auth = Auth::user();
+        if(!empty($auth) && (Helper::isPm($auth) || Helper::isMember($auth))) {
+            unset($data['data'][0]['sum_cost']);
+        }
         return $this->api($data);
     }
 

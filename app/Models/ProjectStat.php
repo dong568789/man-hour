@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Auth;
 use App\Model;
+use App\Tools\Helper;
 
 class ProjectStat extends Model
 {
@@ -18,3 +20,10 @@ class ProjectStat extends Model
         return $this->hasMany("App\\Models\\ProjectMemberStat", 'pid', 'pid');
     }
 }
+
+ProjectStat::retrieved(function ($user) {
+    $auth = Auth::user();
+    if(!empty($auth) && (Helper::isPm($auth) || Helper::isMember($auth))) {
+        $user->addHidden(['cost', 'day_cost']);
+    }
+});
