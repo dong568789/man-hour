@@ -118,17 +118,22 @@ function getCalendar(obj, b, c) {
         for (var k = 0; k < 7; k++) {                     //每行7天
             inx = i * 7 + k;
             data_str = inx - md1 + 1;                         //日期数字
+
+            var new_data_str = data_str;
+            if (data_str < 10) {
+                new_data_str = '0' + data_str;
+            }
             if (data_str <= 0 || data_str > listMonth[c]) {
                 // 空的星期
                 html2 = html2 + `<div class="date_Date2"><div class=course_state></div></div>`
             } else if (_year == T_year && _month == T_month && T_date == data_str) {
 
                 //今天
-                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${data_str}" onclick=selectDay(this,"${_year}","${_month}","${data_str}")>${data_str}<div class=course_state>今日</div></div>`
+                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${new_data_str}" onclick=selectDay(this,"${_year}","${_month}","${new_data_str}")>${data_str}<div class=course_state>今日</div></div>`
             } else {
                 let _tDate = _year + '-' + _month + '-' + data_str;
 
-                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${data_str}" onclick=selectDay(this,"${_year}","${_month}","${data_str}")>${data_str}</div>`
+                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${new_data_str}" onclick=selectDay(this,"${_year}","${_month}","${new_data_str}")>${data_str}</div>`
 
             }
             // 正常星期内容
@@ -163,6 +168,7 @@ function selectDay(obj, year, month, day)
         jQuery(obj).addClass('act');
         selectDate.push(date);
     }
+    console.log(selectDate);
 }
 
 function checkedStyle()

@@ -129,6 +129,11 @@ class ProjectApplyRepository extends Repository {
             return ['status' => false, "msg" => "重复提交的时间【" . $pm->date . "】"];
         }
 
+        $max = max($data['dates']);
+
+        if ($max > date("Y-m-d")) {
+            return ['status' => false, "msg" => "申报时间不能是未来时间【" . $max . "】"];
+        }
         $project = $pRepo->find($data['pid']);
         $message = $user->realname . ",申请在[" . $project->name  . "]项目中进行工时申报。";
 

@@ -5,7 +5,6 @@
         <a href="javascript:void(0)" id="apply-btn" class="btn btn-sm btn-primary"><i class="fa
                 fa-angle-right"></i>
             提交</a>
-        &nbsp; &nbsp;
     </div>
     <div class="clearfix"></div>
     <{/block}>
