@@ -7,7 +7,7 @@
 <{block "filter"}>
 <{include file="admin/projectMember/filters.inc.tpl"}>
 <{/block}>
-
+<{block "order"}>[[1, "desc"]]<{/block}>
 <{block "table-th-plus"}>
 <th>日期</th>
 <th>项目名称</th>
