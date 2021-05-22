@@ -25,6 +25,10 @@
             <div style="background-color:#fff;">
                 <div class="items-scroll"></div>
                 <div class="calendar">
+                    <div class="status-act" style="text-align: center;padding: 10px 0px">
+
+                        <{block "hour-audit-widget"}><{/block}>
+                    </div>
                     <div class="dateDay">
                         <div class="td">周日</div>
                         <div class="td">周一</div>
