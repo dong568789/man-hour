@@ -193,11 +193,14 @@ function defaultDate ()
 {
     jQuery.each(applyDate, function (key, items) {
 
+        console.log(key);
         var flag = "";
-        if (key == "enabled") {
+        if (key == "pass") {
             flag = "已通过";
-        } else if(key == "apply") {
+        } else if(key == "applying") {
             flag = "审核中";
+        } else if(key == "reject") {
+            flag = "驳回";
         }
         if (items.dates.length > 0) {
 

@@ -142,11 +142,11 @@ class ProjectController extends Controller {
         $apply = $paRepo->myApply($uid, $pid);
 
         return [
-            'enabled' => [
+            'pass' => [
                 'style' => 'label label-success',
                 'dates' => $enable
             ],
-            'apply' => [
+            'applying' => [
                 'style' => 'label label-default',
                 'dates' => $apply,
             ]
@@ -164,8 +164,8 @@ class ProjectController extends Controller {
         $pa = $paRepo->find($id);
 
         return [
-            'apply' => [
-                'style' => 'label label-warning',
+            $pa->apply_status->name => [
+                'style' => '',
                 'dates' => !empty($pa) ? $pa->dates : [],
             ]
         ];
