@@ -25,8 +25,6 @@
     <{/if}>
 <{/block}>
 
-
-
 <{block "table-td-options-edit"}><{/block}>
 <{if !$_permissionTable->checkUserRole(['super'])}>
     <{block "table-th-options"}><{/block}>

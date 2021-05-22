@@ -25,9 +25,9 @@
                         </td>
                         <td class="text-center"><{$project.created_at}></td>
                         <td class="text-center">
-                            <div class="btn-group btn-group-xs">
-                                <a href="<{url('admin/project', [$project.id])}>/edit" class="btn
-                                btn-success">编辑</a>
+                            <div class="btn-group btn-group-md">
+                                <a data-toggle="modal" href="<{url('admin/project', [$project.id])}>"
+                                   data-target="#projectModal" class="btn btn-primary">申报</a>
                             </div>
                         </td>
                     </tr>
@@ -86,8 +86,19 @@
     </div>
 </div>
 
+<div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="height: 500px;overflow: scroll;">
+
+        </div>
+    </div>
+</div>
 <script>
     (function($){
+        $(document).on('hidden.bs.modal', '#projectModal', function(){
+            $(this).removeData("bs.modal");
+            $(this).find('.modal-content').children().remove();
+        });
         $(document).on('hidden.bs.modal', '#infoModal', function(){
             $(this).removeData("bs.modal");
             $(this).find('.modal-content').children().remove();

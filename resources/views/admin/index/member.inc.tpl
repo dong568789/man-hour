@@ -25,9 +25,9 @@
                         </td>
                         <td class="text-center"><{$project.created_at}></td>
                         <td class="text-center">
-                            <div class="btn-group btn-group-xs">
+                            <div class="btn-group btn-group-md">
                                 <a data-toggle="modal" href="<{url('admin/project', [$project.id])}>"
-                                   data-target="#projectModal" class="btn btn-success">工时申报</a>
+                                   data-target="#projectModal" class="btn btn-primary">申报</a>
                             </div>
                         </td>
                     </tr>
