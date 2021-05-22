@@ -129,11 +129,11 @@ function getCalendar(obj, b, c) {
             } else if (_year == T_year && _month == T_month && T_date == data_str) {
 
                 //今天
-                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${new_data_str}" onclick=selectDay(this,"${_year}","${_month}","${new_data_str}")>${data_str}<div class=course_state>今日</div></div>`
+                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${new_data_str}" onclick=selectDay(this,"${_year}","${_month}","${new_data_str}")>${data_str}<span class="icon">今日</span></div>`
             } else {
                 let _tDate = _year + '-' + _month + '-' + data_str;
 
-                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${new_data_str}" onclick=selectDay(this,"${_year}","${_month}","${new_data_str}")>${data_str}</div>`
+                html2 = html2 + `<div class="date_Date4" id="${_year}-${_month}-${new_data_str}" onclick=selectDay(this,"${_year}","${_month}","${new_data_str}")>${data_str}<span class="icon"></span></div>`
 
             }
             // 正常星期内容
@@ -192,11 +192,19 @@ function ajaxData(url) {
 function defaultDate ()
 {
     jQuery.each(applyDate, function (key, items) {
+
+        var flag = "";
+        if (key == "enabled") {
+            flag = "已通过";
+        } else if(key == "apply") {
+            flag = "审核中";
+        }
         if (items.dates.length > 0) {
 
             jQuery.each(items.dates, function (k, v) {
                 console.log(k,v);
-                jQuery('#' + v).addClass(items.style)
+                jQuery('#' + v).find('.icon').html(flag)
+                jQuery('#' + v).addClass("disabled");
             })
         }
     })

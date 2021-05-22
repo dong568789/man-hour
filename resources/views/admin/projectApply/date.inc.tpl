@@ -10,6 +10,11 @@
     .date_Dates .label-success, .date_Dates .label-default{
         color: #FFF;
     }
+    .date_Date4 .icon{
+        transform: scale(0.8);
+        color: #0081FF;
+        padding-top: .05rem;
+    }
 </style>
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
