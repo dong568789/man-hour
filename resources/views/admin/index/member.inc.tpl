@@ -45,8 +45,8 @@
                 <thead>
                 <tr>
                     <th class="text-center">申报项目</th>
-                    <th class="text-center">时间</th>
                     <th class="text-center">状态</th>
+                    <th class="text-center">时间</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -57,8 +57,8 @@
                         <td class="text-center">
                             <{$message.project.name}>
                         </td>
-                        <td  class="text-center"><{$message.created_at}></td>
                         <td class="text-center"><span class="<{$message.style}>"><{$message.apply_status.title}></span></td>
+                        <td  class="text-center"><{$message.created_at}></td>
                         <td class="text-center">
                             <a data-toggle="modal"
                                      data-target="#infoModal"
