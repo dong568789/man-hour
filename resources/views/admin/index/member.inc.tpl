@@ -39,15 +39,22 @@
     <div class="col-sm4 col-md-4">
         <div class="block">
             <div class="block-title">
-                <h2> <strong>我的消息</strong> </h2>
+                <h2> <strong>我的申报</strong> </h2>
             </div>
             <table class="table table-bordered table-striped table-vcenter">
+                <thead>
+                <tr>
+                    <th class="text-center">申报项目</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
                 <tbody>
                 <{if !empty($_messages)}>
                     <{foreach $_messages as $message}>
                     <tr>
                         <td class="text-center">
-                            <{$message.message}>
+                            <{$message.project.name}>
                         </td>
                         <td class="text-center"><span class="<{$message.style}>"><{$message.apply_status.title}></span></td>
                         <td class="text-center">
@@ -59,7 +66,7 @@
                     </tr>
                     <{/foreach}>
                     <{else}>
-                    <tr><td class="text-center"> 暂无信息 </td></tr>
+                    <tr><td class="text-center" colspan="3"> 暂无申报 </td></tr>
                     <{/if}>
                 </tbody>
             </table>

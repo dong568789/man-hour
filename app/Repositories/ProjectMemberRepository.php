@@ -121,8 +121,7 @@ class ProjectMemberRepository extends Repository {
 
             if (empty($project->pm_uid)) return;
 
-            $this->createOrUpdate(['uid' => $project->pm_uid, 'pid' => $project->id, 'date' => $at->format("Y-m-d")],
-                ['cost' => $project->pm->cost]);
+            $this->createOrUpdate(['uid' => $project->pm_uid, 'pid' => $project->id, 'date' => $at->format("Y-m-d")],);
         }
     }
 
@@ -134,7 +133,7 @@ class ProjectMemberRepository extends Repository {
      * @param float $cost
      * @return bool
      */
-    public function updateMember(int $uid, int $pid, array $dates, float $cost = 0)
+    public function updateMember(int $uid, int $pid, array $dates, float $cost = null)
     {
         $dates = array_unique($dates);
         foreach ($dates as $date) {
@@ -142,7 +141,7 @@ class ProjectMemberRepository extends Repository {
                 'uid' => $uid,
                 'pid' => $pid,
                 'date' => $date,
-                'cost' => $cost//当前成本
+                'cost' => $cost < 0 ? 0 : $cost//当前成本
             ]);
         }
         return true;

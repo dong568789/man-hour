@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Jobs\Message;
 use App\Role;
+use App\User;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -29,7 +31,9 @@ class MemberController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$size = $request->input('size') ?: $this->userRepo->prePage();
+        //dispatch((new Message(User::find(18))));
+
+        $size = $request->input('size') ?: $this->userRepo->prePage();
 		//view's variant
 		$this->_size = $size;
 		$this->_filters = $this->userRepo->_getFilters($request);
@@ -81,6 +85,8 @@ class MemberController extends Controller
 		$data = $this->censor($request, 'member.store', $this->keys);
 
 		$user = $this->userRepo->store($data);
+		//注册通知
+		dispatch(new Message);
         return $this->success('', url('admin/member?q[ofRole]=' . current($data['role_ids'])));
 	}
 

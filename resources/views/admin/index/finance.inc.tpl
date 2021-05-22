@@ -47,15 +47,7 @@
                     <{foreach $_messages as $message}>
                     <tr>
                         <td class="text-center">
-                            <{$message.message}>
-                        </td>
-                        <td class="text-center"><{$message.apply_status.title}></td>
-                        <td class="text-center">
-                            <a data-toggle="modal"
-                               data-target="#infoModal"
-
-                               href="<{url('admin/project-apply', [$message.id])}>"
-                               class="btn btn-xs btn-success"> 查看</a>
+                            <{$message.content nofilter}>
                         </td>
                     </tr>
                     <{/foreach}>

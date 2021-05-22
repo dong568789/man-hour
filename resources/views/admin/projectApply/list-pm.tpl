@@ -1,6 +1,6 @@
 <{extends file="admin/extends/list.block.tpl"}>
 
-<{block "title"}>我的消息<{/block}>
+<{block "title"}>申报记录<{/block}>
 
 <{block "name"}>project-apply<{/block}>
 
@@ -9,19 +9,15 @@
 <{/block}>
 
 <{block "table-th-plus"}>
-<th>消息</th>
-<th>日期</th>
+<th>申报人</th>
+<th>申报项目</th>
 <th>状态</th>
 <{/block}>
 
 <!-- DataTable的Block -->
 <{block "table-td-plus"}>
-<td data-from="message" data-orderable="false">{{data}}</td>
-<td data-from="dates" data-orderable="false">
-    {{each data as v k}}
-    <span class="label label-primary">{{v}}</span>
-    {{/each}}
-</td>
+<td data-from="member" data-orderable="false">{{data.realname}}</td>
+<td data-from="project" data-orderable="false">{{data.name}}</td>
     <td data-from="apply_status" data-orderable="false">{{if data}}<span class="{{full.style}}">{{data.title}}</span>{{/if}}</td>
     <{/block}>
 <{block "table-td-options-after"}>

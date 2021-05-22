@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 use App\Repositories\UserRepository;
 
@@ -26,7 +25,7 @@ class MemberController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		return $this->api($request->user());
+        return $this->api($request->user());
 	}
 
 	/**
@@ -55,6 +54,7 @@ class MemberController extends Controller
 
 		unset($data['accept_license']);
 		$user = $this->repo->store($data, 'user1');
+
 		return $this->success(NULL, 'auth', $user->toArray());
 	}
 

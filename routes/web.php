@@ -23,6 +23,7 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
     $router->put('member/cost/{id}', 'MemberController@cost')->where('id', '[\d]+');
     $router->post('project/apply', 'ProjectController@apply');
     $router->post('project/date/{id}', 'ProjectController@date')->where('id', '[\d]+');
+    $router->get('message/read', 'MessageController@read');
 	$router->crud([
 		'member' => 'MemberController',
 		'project' => 'ProjectController',
@@ -30,6 +31,7 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
 		'project-apply' => 'ProjectApplyController',
 		'project-stat' => 'ProjectStatController',
 		'project-member-stat' => 'ProjectMemberStatController',
+		'message' => 'MessageController',
 	]);
 	$router->get('/', 'HomeController@index')->name('admin-index');
 

@@ -93,7 +93,7 @@ class ProjectStatRepository extends Repository {
 		return $data;
 	}
 
-	public function stat(int $pid = 0)
+	public function stat(int $pid)
     {
         DB::transaction(function() use ($pid){
             $pRepo = new ProjectRepository();

@@ -84,7 +84,7 @@
 		<{/if}>
 		<{if $_permissionTable->checkUserRole(['super', 'pm', 'project-member'])}>
 		<li><a href="<{'admin/project-apply'|url}>" name="project-apply/list">
-				申请记录</a></li>
+				申报记录</a></li>
 		<{/if}>
 		<li><a href="<{'admin/project-member-stat'|url}>" name="project-member-stat/list">
 				工时明细</a></li>

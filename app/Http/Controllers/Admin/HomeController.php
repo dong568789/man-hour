@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\MessageRepository;
 use App\Repositories\ProjectMemberRepository;
 use Auth;
 use Illuminate\Http\Request;
@@ -98,5 +99,13 @@ class HomeController extends Controller
     private function finance(Request $request, User $user)
     {
         $this->_messages = [];
+
+        $mRepo = new MessageRepository();
+
+        $request->offsetSet('f', ['uid' => $user->id, 'read' => 0]);
+        $request->offsetSet('o', ['id' => 'desc']);
+        $request->offsetSet('size', 20);
+        $messages = $mRepo->data($request);
+        $this->_messages = $messages['data'];
     }
 }

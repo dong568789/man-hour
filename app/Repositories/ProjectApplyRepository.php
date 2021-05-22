@@ -87,7 +87,7 @@ class ProjectApplyRepository extends Repository {
 	public function data(Request $request, callable $callback = null, array $columns = ['*'])
 	{
 		$model = new ProjectApply;
-		$builder = $model->newQuery()->with(['project']);
+		$builder = $model->newQuery()->with(['project', 'member']);
 
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);
