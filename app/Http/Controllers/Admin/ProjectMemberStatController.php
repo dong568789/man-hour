@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\ProjectMemberRepository;
 use App\Tools\Helper;
 use Auth;
 use Addons\Core\ApiTrait;
@@ -46,44 +47,51 @@ class ProjectMemberStatController extends Controller {
 
     public function data(Request $request)
     {
+        $request->offsetSet('o', ['uid' => 'desc']);
+
         $this->parseRequest($request);
-        $data = $this->repo->data($request);
-        $auth = Auth::user();
-        if(!empty($auth) && (Helper::isPm($auth) || Helper::isMember($auth))) {
-            unset($data['data'][0]['sum_cost']);
-        }
+
+        $data = (new ProjectMemberRepository)->stat($request, function ($items){
+            foreach ($items as $item) {
+                $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
+            }
+        });
+
         return $this->api($data);
     }
 
     public function export(Request $request)
     {
+        $request->offsetSet('o', ['uid' => 'desc']);
+        $request->offsetSet('size', 1000);
         $this->parseRequest($request);
-        $data = $this->repo->export($request);
+        $data = (new ProjectMemberRepository)->stat($request, function ($items){
+            foreach ($items as $item) {
+                $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
+            }
+        });
 
         $user = Auth::user();
 
         if (Helper::isPm($user)) {
-            $exportData[] = ['项目名称', '成员', '总工时', '创建时间'];
+            $exportData[] = ['项目名称', '成员', '总工时'];
         } elseif (Helper::isMember($user)) {
-            $exportData[] = ['项目名称', '总工时', '创建时间'];
+            $exportData[] = ['项目名称', '总工时'];
         } elseif (Helper::isFinance($user) || Helper::isSuper($user)) {
-            $exportData[] = ['项目名称', '成员', '每日成本', '总工时', '总成本', '创建时间'];
+            $exportData[] = ['项目名称', '成员', '每日成本', '总工时', '总成本'];
         }
 
-        foreach ($data as $key=>$item) {
-            if ($key == 0 || $key == 1) continue;
+        foreach ($data['data'] as $key=>$item) {
             if (Helper::isPm($user)) {
                 $exportData[] = [
                     '项目名称' => $item['project']['name'] ?? '-',
                     '成员' => $item['member']['realname'] ?? '-',
                     '总工时' => $item['hour'],
-                    '创建时间' => $item['created_at']
                 ];
             } elseif (Helper::isMember($user)) {
                 $exportData[] = [
                     '项目名称' => $item['project']['name'] ?? '-',
                     '总工时' => $item['hour'],
-                    '创建时间' => $item['created_at']
                 ];
             } elseif (Helper::isFinance($user) || Helper::isSuper($user)) {
                 $exportData[] = [
@@ -92,7 +100,6 @@ class ProjectMemberStatController extends Controller {
                     '每日成本' => round($item['member']['cost'], 2),
                     '总工时' => $item['hour'],
                     '总成本' => round($item['cost'], 2),
-                    '创建时间' => $item['created_at']
                 ];
             }
         }

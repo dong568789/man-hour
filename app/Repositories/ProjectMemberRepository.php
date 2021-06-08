@@ -176,4 +176,44 @@ class ProjectMemberRepository extends Repository {
         ('date')->toArray();
 
     }
+
+
+    public function stat(Request $request, callable $callback = null, array $columns = ['*'])
+    {
+        $model = new ProjectMember;
+        $builder = $model->newQuery()->with(['project', 'member'])->groupBy(['uid', 'pid']);
+
+        $builder->select([DB::raw('count(*) as aggregate')]);
+        $total = $this->_getCount($request, $builder, false);
+
+        $builder->select([DB::raw('count(*) as hour'), 'uid', 'pid']);
+        $data = $this->_getData($request, $builder, $callback, $columns);
+        $data['recordsTotal'] = $total; //不带 f q 条件的总数
+        $data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
+
+        return $data;
+    }
+
+
+
+    /**
+     * 统计成员在每个项目中的天数
+     * @param int $pid
+     * @param int $uid
+     * @param Carbon $start
+     * @param Carbon $end
+     * @return ProjectMember[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+//    public function stat(int $pid, int $uid, Carbon $start, Carbon $end)
+//    {
+//        $builder = ProjectMember::with(['member', 'project']);
+//
+//        !empty($pid) && $builder->where('pid', $pid);
+//        !empty($uid) && $builder->where('uid', $uid);
+//        !empty($start) && $builder->where('date', '>=', $start);
+//        !empty($end) && $builder->where('date', '<=', $end);
+//
+//        return $builder->groupBy('uid', 'pid')->select([DB::raw('sum(*) as day_count'), 'uid', 'pid'])->get();
+//
+//    }
 }

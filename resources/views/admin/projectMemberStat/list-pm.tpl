@@ -11,7 +11,7 @@
 <{block "table-th-plus"}>
 <th>项目名称</th>
 <th>成员</th>
-<th>总工时(天)<br><span id="sum_hour" class="text-danger" style="font-size: 12px"></span></th>
+<th>总工时(天)</th>
 <{/block}>
 
 <!-- DataTable的Block -->
@@ -22,7 +22,7 @@
 <{/block}>
 
 <{block "body-scripts"}>
-    <script>
+<!--    <script>
         (function($){
             $('#datatable').on('datatable.header', function (event, head, data) {
                 if(data[0]){
@@ -30,12 +30,14 @@
                 }
             });
         })(jQuery);
-    </script>
+    </script>-->
 <{/block}>
 
 <{block "table-td-options-after"}>
-    <a href="<{''|url}>/admin/project-member?f[uid]={{full.uid}}&f[pid]={{full.pid}}" title="明细" class="btn btn-xs
-    btn-success"><i
+    <a href="<{''|url}>/admin/project-member?f[uid]={{full.uid}}&f[pid]={{full.pid}}&f[date][min]=<{$_filters.date.min}>&f[date][max]=<{$_filters.date.max}>"
+       title="明细"
+       class="btn
+    btn-xs btn-success"><i
                 class="fa fa-list"></i> 明细</a>
     <{/block}>
 
@@ -43,6 +45,6 @@
 
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
-<{block "table-tools-create"}><{/block}>
-<{block "table-th-timestamps-updated_at"}><{/block}>
-<{block "table-td-timestamps-updated_at"}><{/block}>
+<{block "table-tools-dropdown-operate"}><{/block}>
+<{block "table-th-timestamps"}><{/block}>
+<{block "table-td-timestamps"}><{/block}>
