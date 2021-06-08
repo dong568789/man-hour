@@ -98,14 +98,23 @@ class HomeController extends Controller
 
     private function finance(Request $request, User $user)
     {
-        $this->_messages = [];
+//        $this->_messages = [];
+//
+//        $mRepo = new MessageRepository();
+//
+//        $request->offsetSet('f', ['uid' => $user->id, 'read' => 0]);
+//        $request->offsetSet('o', ['id' => 'desc']);
+//        $request->offsetSet('size', 20);
+//        $messages = $mRepo->data($request);
+//
+//
+//        $this->_messages = $messages['data'];
 
-        $mRepo = new MessageRepository();
+        $applying = catalog_search('status.apply_status.applying', 'id');
+        $paRepo = new ProjectApplyRepository();
+        $request->offsetSet('f', ['apply_status' => $applying]);
+        $data = $paRepo->data($request);
 
-        $request->offsetSet('f', ['uid' => $user->id, 'read' => 0]);
-        $request->offsetSet('o', ['id' => 'desc']);
-        $request->offsetSet('size', 20);
-        $messages = $mRepo->data($request);
-        $this->_messages = $messages['data'];
+        $this->_messages = $data['data'];
     }
 }

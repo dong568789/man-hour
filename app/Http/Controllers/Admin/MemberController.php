@@ -86,7 +86,7 @@ class MemberController extends Controller
 
 		$user = $this->userRepo->store($data);
 		//注册通知
-		dispatch(new Message);
+		//dispatch(new Message);
         return $this->success('', url('admin/member?q[ofRole]=' . current($data['role_ids'])));
 	}
 

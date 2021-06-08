@@ -80,6 +80,7 @@ class ProjectApplyController extends Controller {
         $this->_data = $paArr;
         $this->_type = "audit";
         $this->_allMonth = json_encode(Helper::uniqueMonth($paArr['dates']));
+
         return !$request->offsetExists('of') ? $this->view('admin.projectApply.show-' . $tpl) : $this->api($paArr);
     }
 
