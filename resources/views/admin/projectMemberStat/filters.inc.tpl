@@ -13,7 +13,6 @@
 		<div class="col-md-9">
 			<select type="text" id="uid" name="f[uid]" class="form-control select-model"
 					data-model="admin/member"
-					data-params='{"q":{"ofRole": <{\App\Role::searchRole("administrator.project-member", "id")}>}}'
 					data-text="{{realname}}({{post.title}})" data-placeholder="请输入关键词..." value="<{$_filters.uid.eq}>"></select>
 		</div>
 	</div>
