@@ -44,7 +44,8 @@
     btn-xs btn-success"><i
                 class="fa fa-list"></i> 明细</a>
     <{/block}>
-
+<{block "table-th-id"}><{/block}>
+<{block "table-td-id"}><{/block}>
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
 <{block "table-tools-dropdown-operate"}><{/block}>
