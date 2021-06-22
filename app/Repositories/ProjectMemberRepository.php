@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Tools\Helper;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -181,13 +182,18 @@ class ProjectMemberRepository extends Repository {
     public function stat(Request $request, callable $callback = null, array $columns = ['*'])
     {
         $model = new ProjectMember;
-        $builder = $model->newQuery()->with(['project', 'member'])->groupBy(['uid', 'pid']);
+        $builder = $model->newQuery()->with(['project', 'member']);
+        $newBuilder = clone $builder;
 
-        $builder->select([DB::raw('count(*) as aggregate')]);
+        $builder->groupBy(['uid', 'pid'])->select([DB::raw('count(*) as aggregate')]);
         $total = $this->_getCount($request, $builder, false);
+        $sum = (new Helper)->_getOther($request, $newBuilder->select([DB::raw('count(*) as sum_day')]));
 
         $builder->select([DB::raw('count(*) as hour'), 'uid', 'pid']);
         $data = $this->_getData($request, $builder, $callback, $columns);
+        if (!empty($data['data'][0])) {
+            $data['data'][0]['sum_day'] = $sum->sum_day;
+        }
         $data['recordsTotal'] = $total; //不带 f q 条件的总数
         $data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 

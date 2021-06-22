@@ -47,6 +47,8 @@ class ProjectApplyRepository extends Repository {
 
                     //审核通过，更新统计数据
                     dispatch((new StatHour($model->pid)));
+                } elseif ($data['status'] == 2) {
+                    $status = catalog_search('status.apply_status.recall', 'id');
                 } else {
                     $status = catalog_search('status.apply_status.reject', 'id');
                 }
@@ -153,8 +155,9 @@ class ProjectApplyRepository extends Repository {
         $applying = catalog_search('status.apply_status.applying', 'id');
         $pass = catalog_search('status.apply_status.pass', 'id');
         $reject = catalog_search('status.apply_status.reject', 'id');
+        $recall = catalog_search('status.apply_status.recall', 'id');
         foreach ($pas as &$pa) {
-            $this->setStyle($pa, $applying, $pass, $reject);
+            $this->setStyle($pa, $applying, $pass, $reject, $recall);
         }
     }
 
@@ -166,6 +169,8 @@ class ProjectApplyRepository extends Repository {
             $pa['style'] = "label label-success";
         } elseif ($pa['apply_status']['id'] == $status[2]) {
             $pa['style'] = "label label-warning";
+        } elseif ($pa['apply_status']['id'] == $status[3]) {
+            $pa['style'] = "label label-danger";
         }
     }
 

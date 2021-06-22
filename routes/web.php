@@ -34,6 +34,7 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
 		'message' => 'MessageController',
 	]);
 	$router->get('/', 'HomeController@index')->name('admin-index');
+	$router->put('project-apply/recall/{id}', 'ProjectApplyController@recall');//撤销申报
 
 });
 

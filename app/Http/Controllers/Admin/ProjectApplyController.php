@@ -74,7 +74,7 @@ class ProjectApplyController extends Controller {
 
         $paArr = $pa->toArray();
 
-        $this->repo->setStyle($paArr, catalog_search('status.apply_status.applying', 'id'), catalog_search('status.apply_status.pass', 'id'), catalog_search('status.apply_status.reject', 'id'));
+        $this->repo->setStyle($paArr, catalog_search('status.apply_status.applying', 'id'), catalog_search('status.apply_status.pass', 'id'), catalog_search('status.apply_status.reject', 'id'),catalog_search('status.apply_status.recall', 'id'));
         $user = Auth::user();
         $tpl = Helper::getRoleTpl($user);
         $this->_data = $paArr;
@@ -94,6 +94,25 @@ class ProjectApplyController extends Controller {
         $data = $this->censor($request, 'projectApply.store', $keys, $projectApply);
 
         $data['operator_uid'] = Auth::user()->id;
+        $return = $this->repo->update($projectApply, $data);
+        if (is_string($return)) {
+            return $this->error($return);
+        }
+        return $this->success();
+    }
+
+    public function recall(Request $request, $id)
+    {
+        $projectApply = $this->repo->find($id);
+        if (empty($projectApply))
+            return $this->failure_notexists();
+
+        if ($projectApply->apply_status->id != catalog_search('status.apply_status.applying', 'id')) {
+            return $this->error("该申报记录，状态已变更，不可撤销。");
+        }
+        $data['operator_uid'] = Auth::user()->id;
+
+        $data['status'] = 2;
         $return = $this->repo->update($projectApply, $data);
         if (is_string($return)) {
             return $this->error($return);

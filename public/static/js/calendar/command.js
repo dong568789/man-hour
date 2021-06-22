@@ -201,6 +201,8 @@ function defaultDate ()
             flag = "审核中";
         } else if(key == "reject") {
             flag = "驳回";
+        } else if(key == "recall") {
+            flag = "撤销";
         }
         if (items.dates.length > 0) {
 

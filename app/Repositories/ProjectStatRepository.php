@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Tools\Helper;
 use DB;
 use Carbon\Carbon;
 use Addons\Core\ApiTrait;
@@ -62,7 +63,7 @@ class ProjectStatRepository extends Repository {
         }]);
 
         $newBuilder = clone $builder;
-        $sum = $this->_getOther($request, $newBuilder->select([DB::raw('sum(day_cost) as sum_day_cost'), DB::raw('sum(cost) as sum_cost')]));
+        $sum = (new Helper)->_getOther($request, $newBuilder->select([DB::raw('sum(day_cost) as sum_day_cost'), DB::raw('sum(cost) as sum_cost')]));
 
 		$total = $this->_getCount($request, $builder, false);
 		$data = $this->_getData($request, $builder, $callback, $columns);
@@ -136,29 +137,5 @@ class ProjectStatRepository extends Repository {
         return DB::transaction(function() use ($pid, $cost, $avg, $dayCost) {
             return ProjectStat::updateOrCreate(['pid' => $pid], ['cost' => $cost, 'avg_cost' => $avg, 'day_cost' => $dayCost]);
         });
-    }
-
-    public function _getOther(Request $request, Builder $builder)
-    {
-        $tables_columns = $this->_getColumns($builder);
-        $this->_doFilters($request, $builder, $tables_columns);
-        $this->_doQueries($request, $builder);
-
-        $query = $builder->getQuery();
-
-        if (!empty($query->groups)) //group by
-        {
-
-            return $query->getCountForPagination($query->groups);
-            // or
-            $query->columns = $query->groups;
-            return DB::table( DB::raw("({$builder->toSql()}) as sub") )
-                ->mergeBindings($builder->getQuery()) // you need to get underlying Query Builder
-                ->first();
-        } else
-            //DB::connection()->enableQueryLog(); // 开启查询日志
-            return $builder->first();;
-        //$queries = DB::getQueryLog(); // 获取查询日志
-        //print_r($builder->toSql());exit;
     }
 }

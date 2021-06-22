@@ -12,7 +12,7 @@
 <th>项目名称</th>
 <th>成员</th>
 <th>每日成本</th>
-<th>总工时(天)</th>
+<th>总工时(天)<br><span id="sum_day" class="text-danger" style="font-size: 12px"></span></th>
 <th>总成本</th>
 <{/block}>
 
@@ -26,17 +26,16 @@
 <{/block}>
 
 <{block "body-scripts"}>
-<!--    <script>
+    <script>
         (function($){
             $('#datatable').on('datatable.header', function (event, head, data) {
                 if(data[0]){
-                    $('#sum_cost', head).html("总额：" + data[0].sum_cost);
-                    $('#sum_hour', head).html("总计：" + data[0].sum_hour);
+                    $('#sum_day', head).html("合计：" + data[0].sum_day);
                 }
             });
         })(jQuery);
-    </script>-->
-<{/block}>
+    </script>
+    <{/block}>
 
 <{block "table-td-options-after"}>
     <a href="<{''|url}>/admin/project-member?f[uid]={{full.uid}}&f[pid]={{full.pid}}&f[date][min]=<{$_filters.date.min}>&f[date][max]=<{$_filters.date.max}>"

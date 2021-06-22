@@ -1,9 +1,15 @@
 <?php
 namespace App\Tools;
 
+use Addons\Core\ApiTrait;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
+
 use App\User;
 
 class Helper {
+
+    use ApiTrait;
 
     public static function isSuper(User $user)
     {
@@ -63,6 +69,31 @@ class Helper {
         sort($dates);
 
         return $dates;
+    }
+
+
+    public function _getOther(Request $request, Builder $builder)
+    {
+        $tables_columns = $this->_getColumns($builder);
+        $this->_doFilters($request, $builder, $tables_columns);
+        $this->_doQueries($request, $builder);
+
+        $query = $builder->getQuery();
+
+        if (!empty($query->groups)) //group by
+        {
+
+            //return $query->getCountForPagination($query->groups);
+            // or
+            $query->columns = $query->groups;
+            return DB::table( DB::raw("({$builder->toSql()}) as sub") )
+                ->mergeBindings($builder->getQuery()) // you need to get underlying Query Builder
+                ->first();
+        } else
+            //DB::connection()->enableQueryLog(); // 开启查询日志
+            return $builder->first();;
+        //$queries = DB::getQueryLog(); // 获取查询日志
+        //print_r($builder->toSql());exit;
     }
 }
 
