@@ -1,6 +1,7 @@
 <{extends file="admin/projectApply/date.inc.tpl"}>
 
 <{block "hour-audit-widget"}>
+<{if $_data.apply_status.id == catalog_search('status.apply_status.applying', 'id')}>
     <div class="form-group col-sm-4 pull-right text-right">
         <span>*申报日期错误，可撤销</span>&nbsp;<a class="btn btn-primary" href="<{url('admin/project-apply')
         }>/recall/<{$_data.id}>"
@@ -10,6 +11,7 @@
 
     </div>
     <div class="clearfix"></div>
+<{/if}>
     <{/block}>
 
 <{block "hour-apply-widget"}>
