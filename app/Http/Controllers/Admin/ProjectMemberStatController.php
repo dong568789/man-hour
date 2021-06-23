@@ -33,7 +33,7 @@ class ProjectMemberStatController extends Controller {
      */
     public function index(Request $request)
     {
-        $size = 200;
+        $size = 100;
         //view's variant
         $this->_size = $size;
         $this->_filters = $this->repo->_getFilters($request);
