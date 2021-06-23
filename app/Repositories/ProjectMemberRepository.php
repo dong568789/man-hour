@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Tools\Helper;
-use Carbon\Carbon;
 use DB;
+use Carbon\Carbon;
+use App\Tools\Helper;
 use Illuminate\Http\Request;
 use Addons\Core\Contracts\Repository;
 use Illuminate\Database\Eloquent\Model;
