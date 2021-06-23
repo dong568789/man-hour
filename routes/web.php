@@ -35,6 +35,7 @@ $router->group(['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['a
 	]);
 	$router->get('/', 'HomeController@index')->name('admin-index');
 	$router->put('project-apply/recall/{id}', 'ProjectApplyController@recall');//撤销申报
+	$router->post('project-stat/afresh', 'ProjectStatController@afresh');//重新统计
 
 });
 

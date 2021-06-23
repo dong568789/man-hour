@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Repositories\ProjectRepository;
 use Auth;
+use App\Jobs\StatHour;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectStatRepository;
 
 class ProjectStatController extends Controller {
@@ -124,6 +125,18 @@ class ProjectStatController extends Controller {
         $this->repo->update($projectStat, $data);
 
         return $this->success();
+    }
+
+    /**
+     * 重新统计
+     * @param Request $request
+     */
+    public function afresh(Request $request)
+    {
+        //统计所有
+        dispatch((new StatHour()));
+
+        return $this->success("统计成功");
     }
 
     public function destroy(Request $request, $id)

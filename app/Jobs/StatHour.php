@@ -16,7 +16,7 @@ class StatHour implements ShouldQueue
 
 	protected $pid;
 
-	public function __construct($pid)
+	public function __construct(int $pid = 0)
 	{
 		$this->pid = $pid;
 	}

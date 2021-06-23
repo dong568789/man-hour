@@ -7,6 +7,10 @@
 <{block "filter"}>
 <{include file="admin/projectStat/filters.inc.tpl"}>
 <{/block}>
+<{block "table-tools-after"}> <a class="btn btn-primary" href="<{url('admin/project-stat')}>/afresh"
+                                                                                    method="POST"
+                                                                                    confirm="确认重新统计吗？"
+                                                                                    data-toggle="tooltip">重新统计</a><{/block}>
 
 <{block "table-th-plus"}>
 <th>项目名称</th>
