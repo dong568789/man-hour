@@ -53,15 +53,18 @@ class ProjectMemberStatController extends Controller {
 
         $data = (new ProjectMemberRepository)->stat($request);
         $sumDay = $sumMoney = 0;
-        foreach ($data['data'] as &$item) {
-            $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
-            $sumDay += $item['hour'];
-            $sumMoney += $item['cost'];
+        if (Helper::isFinance()){
+            foreach ($data['data'] as &$item) {
+                $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
+                $sumDay += $item['hour'];
+                $sumMoney += $item['cost'];
+            }
+            if (!empty($data['data'][0])) {
+                $data['data'][0]['sum_day'] = $sumDay;
+                $data['data'][0]['sum_money'] = $sumMoney;
+            }
         }
-        if (!empty($data['data'][0])) {
-            $data['data'][0]['sum_day'] = $sumDay;
-            $data['data'][0]['sum_money'] = $sumMoney;
-        }
+
         return $this->api($data);
     }
 
