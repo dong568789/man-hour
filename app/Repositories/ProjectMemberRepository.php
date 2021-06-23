@@ -190,16 +190,6 @@ class ProjectMemberRepository extends Repository {
         $builder->select([DB::raw('count(*) as hour'), 'uid', 'pid']);
         $data = $this->_getData($request, $builder, $callback, $columns);
 
-        $sumDay = $sumMoney = 0;
-        foreach ($data['data'] as $item) {
-            $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
-            $sumDay += $item['hour'];
-            $sumMoney += $item['cost'];
-        }
-        if (!empty($data['data'][0])) {
-            $data['data'][0]['sum_day'] = $sumDay;
-            $data['data'][0]['sum_money'] = $sumMoney;
-        }
         $data['recordsTotal'] = $total; //不带 f q 条件的总数
         $data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
 
