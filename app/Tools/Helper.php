@@ -1,6 +1,7 @@
 <?php
 namespace App\Tools;
 
+use DB;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -88,7 +89,7 @@ class Helper {
             $query->columns = $query->groups;
             return DB::table( DB::raw("({$builder->toSql()}) as sub") )
                 ->mergeBindings($builder->getQuery()) // you need to get underlying Query Builder
-                ->first();
+                ->get();
         } else
             //DB::connection()->enableQueryLog(); // 开启查询日志
             return $builder->first();;

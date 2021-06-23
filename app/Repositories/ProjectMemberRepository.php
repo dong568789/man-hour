@@ -183,16 +183,22 @@ class ProjectMemberRepository extends Repository {
     {
         $model = new ProjectMember;
         $builder = $model->newQuery()->with(['project', 'member']);
-        $newBuilder = clone $builder;
 
         $builder->groupBy(['uid', 'pid'])->select([DB::raw('count(*) as aggregate')]);
         $total = $this->_getCount($request, $builder, false);
-        $sum = (new Helper)->_getOther($request, $newBuilder->select([DB::raw('count(*) as sum_day')]));
 
         $builder->select([DB::raw('count(*) as hour'), 'uid', 'pid']);
         $data = $this->_getData($request, $builder, $callback, $columns);
+
+        $sumDay = $sumMoney = 0;
+        foreach ($data['data'] as $item) {
+            $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
+            $sumDay += $item['hour'];
+            $sumMoney += $item['cost'];
+        }
         if (!empty($data['data'][0])) {
-            $data['data'][0]['sum_day'] = $sum->sum_day;
+            $data['data'][0]['sum_day'] = $sumDay;
+            $data['data'][0]['sum_money'] = $sumMoney;
         }
         $data['recordsTotal'] = $total; //不带 f q 条件的总数
         $data['recordsFiltered'] = $data['total']; //带 f q 条件的总数

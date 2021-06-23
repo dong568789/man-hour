@@ -13,7 +13,7 @@
 <th>成员</th>
 <th>每日成本</th>
 <th>总工时(天)<br><span id="sum_day" class="text-danger" style="font-size: 12px"></span></th>
-<th>总成本</th>
+<th>总成本<br><span id="sum_money" class="text-danger" style="font-size: 12px"></span></th>
 <{/block}>
 
 <!-- DataTable的Block -->
@@ -31,6 +31,7 @@
             $('#datatable').on('datatable.header', function (event, head, data) {
                 if(data[0]){
                     $('#sum_day', head).html("合计：" + data[0].sum_day);
+                    $('#sum_money', head).html("合计：" + data[0].sum_money);
                 }
             });
         })(jQuery);
