@@ -47,13 +47,15 @@ class ProjectMemberStatController extends Controller {
 
     public function data(Request $request)
     {
+        $user = Auth::user();
+
         $request->offsetSet('o', ['uid' => 'desc']);
 
         $this->parseRequest($request);
 
         $data = (new ProjectMemberRepository)->stat($request);
         $sumDay = $sumMoney = 0;
-        if (Helper::isFinance()){
+        if (Helper::isFinance($user)){
             foreach ($data['data'] as &$item) {
                 $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
                 $sumDay += $item['hour'];
