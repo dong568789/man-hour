@@ -179,15 +179,14 @@ class ProjectMemberRepository extends Repository {
     }
 
 
-    public function stat(Request $request, callable $callback = null, array $columns = ['*'])
+    public function memberStat(Request $request, callable $callback = null, array $columns = ['*'])
     {
         $model = new ProjectMember;
         $builder = $model->newQuery()->with(['project', 'member']);
-
-        $builder->groupBy(['uid', 'pid'])->select([DB::raw('count(*) as aggregate')]);
-        $total = $this->_getCount($request, $builder, false);
-
-        $builder->select([DB::raw('count(*) as hour'), 'uid', 'pid']);
+        $newBuilder = clone $builder;
+        $newBuilder->select([DB::raw('count(*) as aggregate')]);
+        $total = $this->_getCount($request, $newBuilder, false);
+        $builder->groupBy(['uid', 'pid'])->select([DB::raw('count(*) as hour'), 'uid', 'pid']);
         $data = $this->_getData($request, $builder, $callback, $columns);
 
         $data['recordsTotal'] = $total; //不带 f q 条件的总数
@@ -196,6 +195,41 @@ class ProjectMemberRepository extends Repository {
         return $data;
     }
 
+    public function stat(Request $request, callable $callback = null, array $columns = ['*'])
+    {
+        $request->offsetSet('o', ['pid' => 'desc']);
+
+        $model = new ProjectMember;
+        $builder = $model->newQuery();
+        $newBuilder = clone $builder;
+        $builder->groupBy(['pid'])->select([DB::raw('count(*) as aggregate')]);
+        $total = $this->_getCount($request, $builder, false);
+
+        $newBuilder->with(['project', 'project.pm'])
+            ->leftJoin('users', 'project_members.uid', '=', 'users.id')
+            ->groupBy(['project_members.pid'])
+            ->select([DB::raw('count(*) as hour'), DB::raw('sum(`users`.`cost`) as cost'), 'project_members.pid']);
+
+        $data = $this->_getData($request, $newBuilder, $callback,
+            $columns);
+
+        $sumMoney = $avgMoney = 0;
+        foreach ($data['data'] as &$item) {
+            $item['day_cost'] = $item['cost'] > 0 ? round($item['cost'] / $item['hour']) : 0;
+            $sumMoney += $item['cost'];
+            $avgMoney += $item['day_cost'];
+        }
+
+        if (!empty($data['data'][0])) {
+            $data['data'][0]['sum_day_cost'] = $avgMoney;
+            $data['data'][0]['sum_cost'] = $sumMoney;
+        }
+
+        $data['recordsTotal'] = $total; //不带 f q 条件的总数
+        $data['recordsFiltered'] = $data['total']; //带 f q 条件的总数
+
+        return $data;
+    }
 
 
     /**

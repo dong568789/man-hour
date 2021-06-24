@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
-use App\Jobs\StatHour;
 use Addons\Core\ApiTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Repositories\ProjectRepository;
 use App\Repositories\ProjectStatRepository;
+use App\Repositories\ProjectMemberRepository;
 
 class ProjectStatController extends Controller {
 
@@ -47,8 +47,7 @@ class ProjectStatController extends Controller {
     {
         $pRepo = new ProjectRepository();
         $progress = catalog_search('status.project_status.progress', 'id');
-
-        $data = $this->repo->data($request, function ($items) use($pRepo, $progress) {
+        $data = (new ProjectMemberRepository)->stat($request, function ($items) use($pRepo, $progress) {
             foreach ($items as $item) {
                 $pRepo->setStyle($item['project'], $progress);
             }
@@ -57,20 +56,17 @@ class ProjectStatController extends Controller {
         return $this->api($data);
     }
 
-
     public function export(Request $request)
     {
-        $data = $this->repo->export($request);
-        $exportData[] = ['项目名称', 'PM', '总成本', '每日成本', '状态', '创建时间'];
-        foreach ($data as $key=>$item) {
-            if ($key == 0 || $key == 1) continue;
+        $data =  (new ProjectMemberRepository)->stat($request);
+        $exportData[] = ['项目名称', 'PM', '总成本', '每日成本', '状态'];
+        foreach ($data['data'] as $key=>$item) {
             $exportData[] = [
                 '项目名称' => $item['project']['name'] ?? '-',
                 'PM' => $item['project']['pm']['realname'] ?? '-',
                 '总成本' => round($item['cost'], 2),
                 '每日成本' => round($item['day_cost'], 2),
                 '状态' => $item['project']['project_status']['title'] ?? '',
-                '创建时间' => $item['created_at']
             ];
         }
 
@@ -125,18 +121,6 @@ class ProjectStatController extends Controller {
         $this->repo->update($projectStat, $data);
 
         return $this->success();
-    }
-
-    /**
-     * 重新统计
-     * @param Request $request
-     */
-    public function afresh(Request $request)
-    {
-        //统计所有
-        dispatch((new StatHour()));
-
-        return $this->success("统计成功");
     }
 
     public function destroy(Request $request, $id)

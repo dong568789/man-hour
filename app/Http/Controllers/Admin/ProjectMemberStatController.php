@@ -53,7 +53,7 @@ class ProjectMemberStatController extends Controller {
 
         $this->parseRequest($request);
 
-        $data = (new ProjectMemberRepository)->stat($request);
+        $data = (new ProjectMemberRepository)->memberStat($request);
         $sumDay = $sumMoney = 0;
         if (Helper::isFinance($user)){
             foreach ($data['data'] as &$item) {
@@ -75,7 +75,7 @@ class ProjectMemberStatController extends Controller {
         $request->offsetSet('o', ['uid' => 'desc']);
         $request->offsetSet('size', 1000);
         $this->parseRequest($request);
-        $data = (new ProjectMemberRepository)->stat($request, function ($items){
+        $data = (new ProjectMemberRepository)->memberStat($request, function ($items){
             foreach ($items as $item) {
                 $item['cost'] = $item['member']['cost'] > 0 ? round($item['hour'] * $item['member']['cost'], 2) : 0;
             }

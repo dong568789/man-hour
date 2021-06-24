@@ -46,7 +46,7 @@ class ProjectApplyRepository extends Repository {
                     $this->audit($model);
 
                     //审核通过，更新统计数据
-                    dispatch((new StatHour($model->pid)));
+                    //dispatch((new StatHour($model->pid)));
                 } elseif ($data['status'] == 2) {
                     $status = catalog_search('status.apply_status.recall', 'id');
                 } else {

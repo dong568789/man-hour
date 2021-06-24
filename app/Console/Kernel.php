@@ -52,9 +52,9 @@ class Kernel extends ConsoleKernel
 //        /**
 //         * 每天统计项目成本
 //         */
-        $schedule->command('project:stat')
-            ->dailyAt('01:00')
-            ->appendOutputTo($logPath);
+//        $schedule->command('project:stat')
+//            ->dailyAt('01:00')
+//            ->appendOutputTo($logPath);
     }
 
     /**

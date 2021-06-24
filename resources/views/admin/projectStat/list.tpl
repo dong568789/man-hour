@@ -7,10 +7,10 @@
 <{block "filter"}>
 <{include file="admin/projectStat/filters.inc.tpl"}>
 <{/block}>
-<{block "table-tools-after"}> <a class="btn btn-primary" href="<{url('admin/project-stat')}>/afresh"
+<{block "table-tools-after"}><!-- <a class="btn btn-primary" href="<{url('admin/project-stat')}>/afresh"
                                                                                     method="POST"
                                                                                     confirm="确认重新统计吗？"
-                                                                                    data-toggle="tooltip">重新统计</a><{/block}>
+                                                                                    data-toggle="tooltip">重新统计</a>--><{/block}>
 
 <{block "table-th-plus"}>
 <th>项目名称</th>
@@ -24,8 +24,8 @@
 <{block "table-td-plus"}>
 <td data-from="project" data-orderable="false">{{if data}}{{data.name}}{{/if}}</td>
 <td data-from="project" data-orderable="false">{{if data.pm}}{{data.pm.realname}}{{/if}}</td>
-<td data-from="cost">{{data}}</td>
-<td data-from="day_cost">{{data}}</td>
+<td data-from="cost" data-orderable="false">{{data}}</td>
+<td data-from="day_cost" data-orderable="false">{{data}}</td>
 <td data-from="project" data-orderable="false">
     {{if data}}
     <span class="{{data.style}}"> {{data.project_status.title}}</span>
@@ -49,6 +49,8 @@
         })(jQuery);
     </script>
 <{/block}>
+<{block "table-th-id"}><{/block}>
+<{block "table-td-id"}><{/block}>
 <{block "table-tools-dropdown-operate"}><{/block}>
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
