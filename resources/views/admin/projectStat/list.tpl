@@ -54,7 +54,7 @@
 <{block "table-tools-dropdown-operate"}><{/block}>
 <{block "table-td-options-edit"}><{/block}>
 <{block "table-td-options-delete"}><{/block}>
-<{block "table-th-timestamps-updated_at"}><{/block}>
-<{block "table-td-timestamps-updated_at"}><{/block}>
+<{block "table-th-timestamps"}><{/block}>
+<{block "table-td-timestamps"}><{/block}>
 <{block "table-tools-create"}><{/block}>
 <{block "table-td-options-delete-confirm"}>您确定删除这项：{{full.username}}吗？<{/block}>
