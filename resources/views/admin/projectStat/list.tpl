@@ -33,7 +33,7 @@
 </td>
     <{/block}>
 <{block "table-td-options-after"}>
-    <a href="<{''|url}>/admin/project-member-stat?f[pid]={{full.pid}}" title="明细" class="btn btn-xs btn-success"><i
+    <a href="<{''|url}>/admin/project-member-stat?f[pid]={{full.pid}}&f[date][min]=<{$_filters.date.min}>&f[date][max]=<{$_filters.date.max}>" title="明细" class="btn btn-xs btn-success"><i
                 class="fa fa-list"></i> 明细</a>
 <{/block}>
 
